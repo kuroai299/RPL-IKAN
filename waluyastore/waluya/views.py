@@ -45,11 +45,11 @@ def user_login(request):
 
                 # Cek apakah pengguna adalah superuser
                 if user.is_superuser:
-                    # Redirect ke halaman produk list admin jika superuser
-                    return redirect('product_list')  # Langsung ke halaman admin
+                    # Redirect langsung ke halaman produk list admin jika superuser
+                    return redirect('product_list')  # Ganti dengan nama URL halaman produk list admin
                 else:
-                    # Redirect ke halaman produk list user jika bukan superuser
-                    return redirect('user_product_list')  # Redirect ke halaman produk untuk user
+                    # Redirect ke landing page jika user umum
+                    return redirect('landing_page')  # Ganti dengan nama URL landing page setelah login
             else:
                 form.add_error('password', 'Password salah')
                 return render(request, 'login.html', {'form': form})
@@ -58,6 +58,7 @@ def user_login(request):
         form = AdminLoginForm()  # Form kosong untuk GET request
 
     return render(request, 'login.html', {'form': form})
+
 
 
 # View untuk sign-up user biasa
@@ -80,10 +81,18 @@ def logout_view(request):
 
 # View untuk landing page
 def landing_page(request):
+    # Cek apakah pengguna sudah login
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('product_list')  # Admin diarahkan ke produk admin
+        else:
+            return render(request, 'landing_page.html')  # User biasa tetap di landing page
+
+    # Jika pengguna belum login, tampilkan halaman landing page biasa
     return render(request, 'landing_page.html')
 
+
 # Pastikan hanya admin yang bisa mengakses halaman produk
-@login_required
 @login_required
 def product_list(request):
     if not request.user.is_superuser:
@@ -158,16 +167,46 @@ def delete_product(request, product_id):
     product.delete()  # Delete the product from the database
     return redirect('product_list')  # Redirect to the product list page after deletion
 
+@login_required
 def user_product_list(request):
     category = request.GET.get('category', 'Fish')  # Default category is 'Fish'
-
+    
+    # Ambil parameter filter dari URL
+    order_by = request.GET.get('order_by', '')  # Sorting by A-Z, Z-A, or price
+    filter_size = request.GET.get('size', '')  # Filter untuk ukuran ikan
+    filter_color = request.GET.get('color', '')  # Filter untuk warna ikan
+    filter_medicine_type = request.GET.get('medicine_type', '')  # Filter untuk tipe obat
+    filter_stuff_type = request.GET.get('stuff_type', '')  # Filter untuk tipe barang aquarium
+    filter_food_type = request.GET.get('food_type', '')  # Filter untuk tipe makanan ikan
+    
+    # Menyaring produk berdasarkan kategori
     if category == 'Fish':
         products = Fish.objects.all()
+        if filter_size:
+            products = products.filter(size=filter_size)  # Filter berdasarkan ukuran ikan
+        if filter_color:
+            products = products.filter(color=filter_color)  # Filter berdasarkan warna ikan
     elif category == 'FishMedicine':
         products = FishMedicine.objects.all()
+        if filter_medicine_type:
+            products = products.filter(medicine_type=filter_medicine_type)  # Filter berdasarkan tipe obat
     elif category == 'AquariumStuff':
         products = AquariumStuff.objects.all()
+        if filter_stuff_type:
+            products = products.filter(stuff_type=filter_stuff_type)  # Filter berdasarkan tipe barang
     elif category == 'FishFood':
         products = FishFood.objects.all()
+        if filter_food_type:
+            products = products.filter(food_type=filter_food_type)  # Filter berdasarkan tipe makanan ikan
+    
+    # Sorting berdasarkan order_by (A-Z, Z-A, harga)
+    if order_by == 'name_asc':
+        products = products.order_by('name')  # Urutkan berdasarkan nama A-Z
+    elif order_by == 'name_desc':
+        products = products.order_by('-name')  # Urutkan berdasarkan nama Z-A
+    elif order_by == 'price_asc':
+        products = products.order_by('price')  # Urutkan berdasarkan harga terendah
+    elif order_by == 'price_desc':
+        products = products.order_by('-price')  # Urutkan berdasarkan harga tertinggi
 
     return render(request, 'user_product_list.html', {'products': products, 'category': category})

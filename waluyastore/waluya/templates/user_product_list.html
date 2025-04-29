@@ -8,16 +8,84 @@
 <body>
     <h1>{{ category }} Products</h1>
 
+    <!-- Filter and sorting options -->
+    <h3>Filter Products</h3>
+    <form method="GET">
+        <input type="hidden" name="category" value="{{ category }}">
+
+        <!-- Sorting options -->
+        <label for="order_by">Sort by:</label>
+        <select name="order_by" id="order_by">
+            <option value="name_asc" {% if request.GET.order_by == "name_asc" %}selected{% endif %}>Name A-Z</option>
+            <option value="name_desc" {% if request.GET.order_by == "name_desc" %}selected{% endif %}>Name Z-A</option>
+            <option value="price_asc" {% if request.GET.order_by == "price_asc" %}selected{% endif %}>Price (Low to High)</option>
+            <option value="price_desc" {% if request.GET.order_by == "price_desc" %}selected{% endif %}>Price (High to Low)</option>
+        </select>
+
+        <!-- Category-specific filters -->
+        {% if category == "Fish" %}
+            <label for="size">Size:</label>
+            <select name="size" id="size">
+                <option value="">All Sizes</option>
+                <option value="small" {% if request.GET.size == "small" %}selected{% endif %}>Small</option>
+                <option value="medium" {% if request.GET.size == "medium" %}selected{% endif %}>Medium</option>
+                <option value="large" {% if request.GET.size == "large" %}selected{% endif %}>Large</option>
+            </select>
+
+            <label for="color">Color:</label>
+            <select name="color" id="color">
+                <option value="">All Colors</option>
+                <option value="dark" {% if request.GET.color == "dark" %}selected{% endif %}>Dark</option>
+                <option value="light" {% if request.GET.color == "light" %}selected{% endif %}>Light</option>
+            </select>
+        {% endif %}
+
+        {% if category == "FishMedicine" %}
+            <label for="medicine_type">Medicine Type:</label>
+            <select name="medicine_type" id="medicine_type">
+                <option value="">All Types</option>
+                <option value="herbal" {% if request.GET.medicine_type == "herbal" %}selected{% endif %}>Herbal</option>
+                <option value="chemical" {% if request.GET.medicine_type == "chemical" %}selected{% endif %}>Chemical</option>
+            </select>
+        {% endif %}
+
+        {% if category == "AquariumStuff" %}
+            <label for="stuff_type">Stuff Type:</label>
+            <select name="stuff_type" id="stuff_type">
+                <option value="">All Types</option>
+                <option value="filter" {% if request.GET.stuff_type == "filter" %}selected{% endif %}>Filter</option>
+                <option value="waterpump" {% if request.GET.stuff_type == "waterpump" %}selected{% endif %}>Water Pump</option>
+                <option value="aeration" {% if request.GET.stuff_type == "aeration" %}selected{% endif %}>Aeration</option>
+                <option value="accessory" {% if request.GET.stuff_type == "accessory" %}selected{% endif %}>Accessory</option>
+            </select>
+        {% endif %}
+
+        {% if category == "FishFood" %}
+            <label for="food_type">Food Type:</label>
+            <select name="food_type" id="food_type">
+                <option value="">All Types</option>
+                <option value="organic" {% if request.GET.food_type == "organic" %}selected{% endif %}>Organic</option>
+                <option value="processed" {% if request.GET.food_type == "processed" %}selected{% endif %}>Processed</option>
+            </select>
+        {% endif %}
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Product list -->
+    <h3>Products</h3>
     {% if products %}
         <ul>
             {% for product in products %}
-                <li>{{ product.name }} - {{ product.price }}</li>
+                <li>
+                    {{ product.name }} - {{ product.price }}
+                    <a href="{% url 'edit_product' product.id %}">Edit</a> |
+                    <a href="{% url 'delete_product' product.id %}">Delete</a>
+                </li>
             {% endfor %}
         </ul>
     {% else %}
         <p>No products available in this category.</p>
     {% endif %}
-
-    <a href="{% url 'landing_page' %}">Back to Home</a>
 </body>
 </html>
