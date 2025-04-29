@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+</head>
+<body>
+    <h1>{{ category }} Products</h1>
+
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>{{ product.name }} - {{ product.price }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products available in this category.</p>
+    {% endif %}
+
+    <a href="{% url 'landing_page' %}">Back to Home</a>
+</body>
+</html>

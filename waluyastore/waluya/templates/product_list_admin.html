@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Product List</title>
+</head>
+<body>
+    <h1>{{ category }} Products - Admin</h1>
+
+    <!-- Navigasi kategori -->
+    <h3>Filter by Category</h3>
+    <ul>
+        <li><a href="?category=Fish">Ikan</a></li>
+        <li><a href="?category=FishMedicine">Obat Ikan</a></li>
+        <li><a href="?category=AquariumStuff">Barang Aquarium</a></li>
+        <li><a href="?category=FishFood">Makanan Ikan</a></li>
+    </ul>
+
+    <h3>Navigation</h3>
+    <ul>
+        <li><a href="{% url 'add_product' %}">Add New Product</a></li>
+    </ul>
+
+    <h3>Products</h3>
+
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    {{ product.name }} - {{ product.price }}
+                    <a href="{% url 'edit_product' product.id %}">Edit</a> |
+                    <a href="{% url 'delete_product' product.id %}">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products available in this category.</p>
+    {% endif %}
+
+    <a href="{% url 'logout' %}">Logout</a>  <!-- Add logout option -->
+</body>
+</html>

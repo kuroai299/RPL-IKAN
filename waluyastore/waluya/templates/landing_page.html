@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page</title>
+</head>
+<body>
+    <h1>Welcome to Waluyastore</h1>
+    
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'wishlist' %}">Go to Wishlist</a>
+    {% else %}
+        <p>If you're a new user, <a href="{% url 'user_signup' %}">sign up</a>.</p>
+        <p>Already have an account? <a href="{% url 'user_login' %}">Login</a>.</p>
+    {% endif %}
+
+    <h2>Browse Our Products</h2>
+    <ul>
+        <li><a href="{% url 'user_product_list' %}?category=Fish">Ikan</a></li>  
+        <li><a href="{% url 'user_product_list' %}?category=FishMedicine">Obat Ikan</a></li>  
+        <li><a href="{% url 'user_product_list' %}?category=AquariumStuff">Barang Aquarium</a></li>  
+        <li><a href="{% url 'user_product_list' %}?category=FishFood">Makanan Ikan</a></li>  
+    </ul>
+</body>
+</html>
