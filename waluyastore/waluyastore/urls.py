@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', views.landing_page, name='landing_page'),  # Landing page untuk semua user
     path('login/', views.user_login, name='user_login'),  # Login untuk semua pengguna
     path('sign_up/', views.user_signup, name='user_signup'),  # Sign-up hanya untuk user biasa
