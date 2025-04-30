@@ -4,6 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product List</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+    
+        h1, h3 {
+            color: #333;
+        }
+    
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    
+        label {
+            font-weight: bold;
+        }
+    
+        input[type="text"], select {
+            padding: 5px 8px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+    
+        button[type="submit"] {
+            padding: 6px 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    
+        a.reset-link {
+            color: #dc3545;
+            text-decoration: none;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+    
+        a.reset-link:hover {
+            text-decoration: underline;
+        }
+    
+        ul {
+            padding-left: 20px;
+        }
+    
+        li {
+            margin-bottom: 10px;
+        }
+    
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+    
+        a:hover {
+            text-decoration: underline;
+        }
+    
+        .product-name-highlight {
+            font-weight: bold;
+            background-color: yellow;
+        }
+    </style>
+    
 </head>
 <body>
     <h1>{{ category }} Products</h1>
@@ -12,6 +89,8 @@
     <h3>Filter Products</h3>
     <form method="GET">
         <input type="hidden" name="category" value="{{ category }}">
+        <label for="search">Search:</label>
+        <input type="text" name="search" id="search" value="{{ request.GET.search }}">
 
         <!-- Sorting options -->
         <label for="order_by">Sort by:</label>
@@ -21,6 +100,10 @@
             <option value="price_asc" {% if request.GET.order_by == "price_asc" %}selected{% endif %}>Price (Low to High)</option>
             <option value="price_desc" {% if request.GET.order_by == "price_desc" %}selected{% endif %}>Price (High to Low)</option>
         </select>
+
+
+        
+
 
         <!-- Category-specific filters -->
         {% if category == "Fish" %}
@@ -70,6 +153,7 @@
         {% endif %}
 
         <button type="submit">Filter</button>
+        <a href="?category={{ category }}" class="reset-link">Reset Filter</a>
     </form>
 
     <!-- Product list -->
@@ -79,8 +163,12 @@
             {% for product in products %}
                 <li>
                     {{ product.name }} - {{ product.price }}
+                    {% if user.is_superuser %}
                     <a href="{% url 'edit_product' product.id %}">Edit</a> |
                     <a href="{% url 'delete_product' product.id %}">Delete</a>
+                    {% else %}
+                    <a href="{% url 'add_to_wishlist' product.id %}">Add to Wishlist</a>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
