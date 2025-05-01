@@ -4,20 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Wishlist</title>
+    {% comment %} ini untuk test pake gambar di wishlist yaa nanti hapus aja{% endcomment %}
+    <style> 
+        img {
+            height: 50px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
+    <!-- 🔔 Flash Messages -->
+    {% if messages %}
+      <ul style="list-style:none; padding: 0;">
+        {% for message in messages %}
+          <li style="
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color:
+                {% if message.tags == 'success' %}#d4edda
+                {% elif message.tags == 'warning' %}#fff3cd
+                {% elif message.tags == 'error' %}#f8d7da
+                {% elif message.tags == 'info' %}#cce5ff
+                {% endif %};
+            color: #000;
+          ">
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    
     <h1>Your Wishlist</h1>
 
     {% if wishlist_items %}
         <ul>
             {% for item in wishlist_items %}
-                <li>{{ item.product.name }} - {{ item.product.price }}</li>
+                <li>
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                    {% endif %}
+                    <strong>{{ item.product.name }}</strong> - Rp {{ item.product.price }}
+                    <form method="post" action="{% url 'remove_from_wishlist' item.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-btn">Remove</button>
+                    </form>
+                </li>
             {% endfor %}
         </ul>
     {% else %}
-        <p>Your wishlist is empty.</p>
+        <p>Your wishlist is empty. Start browsing and add your favorite items!</p>
     {% endif %}
 
-    <a href="{% url 'landing_page' %}">Back to Home</a>
+    <a href="{% url 'landing_page' %}">← Back to Home</a>
 </body>
 </html>

@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.contrib import messages
+
 
 # ==================== USER MANAGEMENT ====================
 
@@ -60,9 +62,21 @@ def landing_page(request):
 
 @login_required
 def add_to_wishlist(request, product_id):
-    product = Product.objects.get(id=product_id)
-    Wishlist.objects.create(user=request.user, product=product)
+    product = get_object_or_404(Product, id=product_id)
+    wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+    if created:
+        messages.success(request, f"{product.name} berhasil ditambahkan ke wishlist.")
+    else:
+        messages.warning(request, f"{product.name} sudah ada di wishlist.")
     return redirect('wishlist')
+
+@login_required
+def remove_from_wishlist(request, wishlist_id):
+    wishlist_item = get_object_or_404(Wishlist, id=wishlist_id, user=request.user)
+    messages.info(request, f"{wishlist_item.product.name} dihapus dari wishlist.")
+    wishlist_item.delete()
+    return redirect('wishlist')
+
 
 @login_required
 def wishlist(request):
