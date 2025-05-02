@@ -1,1 +1,12 @@
--e "*.pyc\n__pycache__/\ndb.sqlite3" 
+# Ignore Python bytecode files
+*.pyc
+
+# Ignore pycache directories
+__pycache__/
+
+# Ignore db.sqlite3 file
+waluyastore/db.sqlite3
+
+# Ignore pycache directories in specific subfolders
+waluyastore/waluya/__pycache__/
+waluyastore/waluyastore/__pycache__/
