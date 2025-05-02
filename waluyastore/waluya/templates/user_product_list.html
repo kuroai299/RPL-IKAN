@@ -162,7 +162,7 @@
         <ul>
             {% for product in products %}
                 <li>
-                    {{ product.name }} - {{ product.price }}
+                    <a href="{% url 'product_detail' product.id %}"><strong>{{ product.name }}</strong></a> - {{ product.price }}
                     {% if user.is_superuser %}
                     <a href="{% url 'edit_product' product.id %}">Edit</a> |
                     <a href="{% url 'delete_product' product.id %}">Delete</a>
@@ -175,5 +175,11 @@
     {% else %}
         <p>No products available in this category.</p>
     {% endif %}
+
+    <!-- Tombol Kembali -->
+    <div style="margin-top: 20px;">
+    <a href="{% url 'landing_page' %}">← Kembali ke Halaman Utama</a>
+    </div>
+
 </body>
 </html>

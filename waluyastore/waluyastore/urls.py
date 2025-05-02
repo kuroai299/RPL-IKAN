@@ -32,6 +32,8 @@ urlpatterns = [
     path('wishlist/', views.wishlist, name='wishlist'),
     path('add_to_wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('remove_from_wishlist/<int:wishlist_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
+    path('contact_admin/', views.contact_admin, name='contact_admin'),
     path('user/product_list/', views.user_product_list, name='user_product_list'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

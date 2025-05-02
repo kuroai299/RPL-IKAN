@@ -2,6 +2,8 @@ from django import forms
 from .models import Fish, FishMedicine, AquariumStuff, FishFood
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from .models import Message
+
 
 
 class FishForm(forms.ModelForm):
@@ -57,3 +59,13 @@ class UserSignupForm(forms.ModelForm):
         if commit:
             user.save()  # Simpan data pengguna ke database
         return user
+    
+#untuk kirim pesan
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['email', 'content']
+        widgets = {
+            'email': forms.EmailInput(attrs={'placeholder': 'Your E-mail'}),
+            'content': forms.Textarea(attrs={'placeholder': 'Type your message'}),
+        }

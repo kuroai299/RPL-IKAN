@@ -12,6 +12,7 @@
         <p>Welcome, {{ user.username }}!</p>
         <a href="{% url 'logout' %}">Logout</a>
         <a href="{% url 'wishlist' %}">Go to Wishlist</a>
+        <a href="{% url 'contact_admin' %}">Kirim Pesan ke </a>
     {% else %}
         <p>If you're a new user, <a href="{% url 'user_signup' %}">sign up</a>.</p>
         <p>Already have an account? <a href="{% url 'user_login' %}">Login</a>.</p>

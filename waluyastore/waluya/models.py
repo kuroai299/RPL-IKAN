@@ -73,3 +73,12 @@ class FishFood(Product):
 
     def __str__(self):
         return f"{self.name} (Fish Food)"
+
+class Message(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.EmailField()
+    content = models.TextField()
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Message from {self.email} at {self.sent_at}"

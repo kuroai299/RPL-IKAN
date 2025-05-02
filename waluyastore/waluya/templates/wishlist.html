@@ -45,11 +45,13 @@
                     {% if item.product.image %}
                         <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                     {% endif %}
-                    <strong>{{ item.product.name }}</strong> - Rp {{ item.product.price }}
-                    <form method="post" action="{% url 'remove_from_wishlist' item.id %}" style="display:inline;">
+                    <a href="{% url 'product_detail' item.product.id %}">
+                        <strong>{{ item.product.name }}</strong>
+                    </a> - Rp {{ item.product.price }}                    
+                    <form method="post" action="{% url 'remove_from_wishlist' item.id %}" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus item ini dari wishlist?')">
                         {% csrf_token %}
                         <button type="submit" class="remove-btn">Remove</button>
-                    </form>
+                    </form>                    
                 </li>
             {% endfor %}
         </ul>

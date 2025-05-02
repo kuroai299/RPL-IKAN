@@ -1,0 +1,13 @@
+<h2>Send Us A Message</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <div>{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Send</button>
+</form>
