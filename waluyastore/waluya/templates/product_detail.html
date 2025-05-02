@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }} - Detail</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        img { max-width: 200px; height: auto; display: block; margin-bottom: 10px; }
+        .back-link { margin-top: 20px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <h1>{{ product.name }}</h1>
+
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% endif %}
+
+    <p><strong>Deskripsi:</strong> {{ product.description }}</p>
+<p><strong>Harga:</strong> Rp {{ product.price }}</p>
+<p><strong>Stok:</strong> {{ product.stock }}</p>
+
+{% if product_type == "Fish" %}
+    <p><strong>Ukuran:</strong> {{ product.size }}</p>
+    <p><strong>Warna:</strong> {{ product.color }}</p>
+{% elif product_type == "FishMedicine" %}
+    <p><strong>Tipe Obat:</strong> {{ product.medicine_type }}</p>
+{% elif product_type == "AquariumStuff" %}
+    <p><strong>Tipe Barang:</strong> {{ product.stuff_type }}</p>
+{% elif product_type == "FishFood" %}
+    <p><strong>Tipe Makanan:</strong> {{ product.food_type }}</p>
+{% endif %}
+
+    <div class="back-link">
+        <a href="{% url 'user_product_list' %}?category={{ product_type }}">← Kembali ke daftar</a>
+    </div>
+</body>
+</html>

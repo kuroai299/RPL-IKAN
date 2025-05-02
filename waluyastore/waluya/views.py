@@ -7,7 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib import messages
-
+from .forms import MessageForm
+from .models import Message 
+from django.contrib import messages as flash_messages 
 
 # ==================== USER MANAGEMENT ====================
 
@@ -159,10 +161,29 @@ def delete_product(request, product_id):
         'FishFood': FishFood
     }
     product = get_object_or_404(model_classes.get(category, Fish), id=product_id)
+    messages.info(request, f"Produk {product.name} berhasil dihapus.")
     product.delete()
     return redirect('product_list')
 
 # ==================== USER BROWSE PRODUCTS ====================
+@login_required
+def product_detail(request, product_id):
+    for model_class, product_type in [
+        (Fish, "Fish"),
+        (FishMedicine, "FishMedicine"),
+        (AquariumStuff, "AquariumStuff"),
+        (FishFood, "FishFood")
+    ]:
+        try:
+            product = model_class.objects.get(id=product_id)
+            return render(request, 'product_detail.html', {
+                'product': product,
+                'product_type': product_type
+            })
+        except model_class.DoesNotExist:
+            continue
+    return HttpResponse("Product not found", status=404)
+
 
 @login_required
 def user_product_list(request):
@@ -219,3 +240,20 @@ def user_product_list(request):
         products = products.order_by('-price')
 
     return render(request, 'user_product_list.html', {'products': products, 'category': category})
+
+@login_required
+def contact_admin(request):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            msg = form.save(commit=False)
+            msg.user = request.user
+            msg.save()
+            flash_messages.success(request, "Pesan berhasil dikirim ke admin!")
+            return redirect('contact_admin')
+    else:
+        form = MessageForm(initial={'email': request.user.email})
+    return render(request, 'contact_admin.html', {'form': form})
+
+
+

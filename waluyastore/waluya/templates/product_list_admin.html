@@ -138,7 +138,7 @@
                 <li>
                     {{ product.name }} - {{ product.price }}
                     <a href="{% url 'edit_product' product.id %}">Edit</a> |
-                    <a href="{% url 'delete_product' product.id %}">Delete</a>
+                    <a href="{% url 'delete_product' product.id %}" onclick="return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
                 </li>
             {% endfor %}
         </ul>
