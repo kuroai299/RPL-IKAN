@@ -1,29 +1,321 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
-</head>
-<body>
-    <h1>Welcome to Waluyastore</h1>
+    <title>Waluya Aquarium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        .Login {
+            font-size: 24px;
+            font-family: Poppins, sans-serif;
+            vertical-align: middle;
+            font-weight: 400;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            padding: 8px 42px;
+            text-align: center;
+            border-width: 2;
+            border-color: #15388F;
+            cursor: pointer;
+        }
     
-    {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}!</p>
-        <a href="{% url 'logout' %}">Logout</a>
-        <a href="{% url 'wishlist' %}">Go to Wishlist</a>
-        <a href="{% url 'contact_admin' %}">Kirim Pesan ke </a>
-    {% else %}
-        <p>If you're a new user, <a href="{% url 'user_signup' %}">sign up</a>.</p>
-        <p>Already have an account? <a href="{% url 'user_login' %}">Login</a>.</p>
-    {% endif %}
+        .Register {
+            font-size: 24px;
+            font-family: Poppins, sans-serif;
+            vertical-align: middle;
+            font-weight: 800;
+            background-color: #15388F;
+            border-radius: 8px;
+            padding: 8px 30px;
+            text-align: center;
+            color: #FFFFFF;
+            border-width: 0px;
+            border-color: #545454;
+            cursor: pointer;
+        }
+    
+        .AboutUs {
+            position: relative;
+            font-size: 32px;
+            font-family: Poppins, sans-serif;
+            vertical-align: middle;
+            font-weight: 700;
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            text-align: center;
+            color: #15388F;
+            padding: 16px 42px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            transition-delay: 0.1ms;
+        }
+    
+        .Send {
+            border: none;
+            background-color: #589EFF;
+            width: 472px;
+            height: 70px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+    
+        .youremail {
+            border-width: 4px;
+            border-color: #589EFF;
+            background-color: #15388F;
+            width: 472px;
+            height: 70px;
+            border-radius: 12px;
+            position: relative;
+            margin: 50px auto;
+            cursor: text;
+        }
+    
+        .type {
+            border-width: 4px;
+            border-color: #589EFF;
+            background-color: #15388F;
+            width: 472px;
+            height: 212px;
+            border-radius: 12px;
+            position: relative;
+            margin: 50px auto;
+            cursor: text;
+        }
+    
+        .text {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+        }
+    
+        .img {
+            width: 322px;
+            height: 397px;
+            left: 32px;
+            top: 2385px;
+            position: absolute;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+    
+        .img:hover {
+            transform: scale(1.1);
+            transition: 0.3s ease-in;
+        }
+    
+        .Send:hover {
+            background-color: skyblue;
+            color: #589EFF;
+        }
+    
+        .AboutUs:hover {
+            background-color: #BCBCBC;
+            color: #1E1E1E;
+        }
+    
+        .Tentang {
+            cursor: pointer;
+        }
+    
+        .Register:hover {
+            background-color: #a7a7a7;
+            color: #FFFFFF;
+        }
+    
+        .Login:hover {
+            background-color: #f1f1f1;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
 
-    <h2>Browse Our Products</h2>
-    <ul>
-        <li><a href="{% url 'user_product_list' %}?category=Fish">Ikan</a></li>  
-        <li><a href="{% url 'user_product_list' %}?category=FishMedicine">Obat Ikan</a></li>  
-        <li><a href="{% url 'user_product_list' %}?category=AquariumStuff">Barang Aquarium</a></li>  
-        <li><a href="{% url 'user_product_list' %}?category=FishFood">Makanan Ikan</a></li>  
-    </ul>
+<body>
+    <div style="width: 1440px; height: 4081px; position: relative; background: white; overflow: hidden;">
+        <div
+            style="width: 1440px; height: 1024px; left: -3px; top: 0px; position: absolute; background: #15388F; z-index: 2; opacity: 40%;">
+        </div>
+
+       <img style="width: 2496px; height: 1664px; left: -614px; top: -640px; position: absolute;" src="{% static 'img/DSCF6764.JPG' %}" />
+        
+        <div
+            style="width: 917px; height: 261px; left: 72px; top: 432px; position: absolute; justify-content: center; display: flex; flex-direction: column; z-index: 2;">
+            <span
+                style="color: white; font-size: 64px; font-family: Poppins, sans-serif; font-weight: 500; line-height: 70px; word-wrap: break-word">Your
+                Trusted Freshwater Aquarium Shop in </span><span
+                style="color: white; font-size: 64px; font-family: Poppins, sans-serif; font-weight: 700; line-height: 60.80px; word-wrap: break-word">Dramaga,
+                Bogor</span>
+        </div>
+        <div
+            style="left: 562px; top: 2265px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 48px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            Produk Kami</div>
+        <button class="AboutUs"
+            style="left: 73px; top: 700px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #22559C; font-size: 32px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word; z-index: 2;">
+            About us</button>
+        <img style="width: 738.44px; height: 317.84px; left: 47.42px; top: 3004.16px; position: absolute; border-radius: 8.42px; cursor: pointer;"
+            src="{% static 'img/GTA San Andreas map 1.png' %}" />
+        <div
+            style="left: 47px; top: 2947px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 35.94px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word; text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25)">
+            Our location</div>
+        <div
+            style="left: 47px; top: 3339px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 25.37px; font-family: Poppins, sans-serif; font-weight: 400; word-wrap: break-word; text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25)">
+            Jalan Perwira....</div>
+    
+            <div style="left: 166px; top: 2470px; position:absolute; justify-content: center; display: flex; flex-direction: column; color: #545454; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+                Ikan
+            </div>
+            
+    
+        <div style="width: 1440px; height: 1123px; left: 0px; top: 977.50px; position: absolute; overflow: hidden">
+            <div
+                style="width: 1437px; height: 236px; left: 3px; top: 986px; position: absolute; background: linear-gradient(360deg, white 0%, rgba(255, 255, 255, 0.73) 16%, rgba(153, 153, 153, 0) 100%)">
+            </div>
+            <div
+                style="width: 1162.15px; height: 731.73px; left: 2543.17px; top: 195.74px; position: absolute; background: #959595; border-radius: 14.42px">
+            </div>
+            <div
+                style="left: 2596.22px; top: 739.79px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 50.68px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+                Our Vision and Mission<br />BLA BLA BLA BLA BLA </div>
+            <div
+                style="width: 1162.15px; height: 700px; left: 1344.99px; top: 210px; position:absolute; background: #2A2A2A; border-radius: 14.42px">
+            </div>
+            <div
+                style="width: 1373.33px; height: 0px; left: 1344.99px; top: 927.48px; position: absolute; transform: rotate(-32deg); transform-origin: top left; outline: 0.79px black solid; outline-offset: -0.40px">
+            </div>
+            <div
+                style="width: 1382.38px; height: 0px; left: 1344.99px; top: 195.74px; position: absolute; transform: rotate(32deg); transform-origin: top left; outline: 0.79px black solid; outline-offset: -0.40px">
+            </div>
+            <div
+                style="width: 1000px;left: 1398.05px; top: 719.20px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 50.68px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+                Our History <br />BLA BLA BLA BLA BLA </div>
+            <div
+                style="width: 1162.15px; height: 731.73px; left: 146.82px; top: 195.74px; position: absolute; background: #2A2A2A; border-radius: 14.42px">
+            </div>
+            <img style="width: 1173.80px; height: 782.53px; left: 136px; top: 170.50px; position: absolute; border-radius: 14.42px; filter: brightness(0.6); cursor: pointer;"
+                src="{% static 'img/DSCF6742.JPG' %}"/>
+            <h1
+                style="left: 181.98px; top: 550px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 50.68px; font-family: Poppins, sans-serif; font-weight: 1500px; word-wrap: break-word">
+                Who are we ?</h1>
+            <h1
+                style="width: 800px; height: 300px; left: 181.98px; top: 680px; word-spacing: 2px; line-height: 30px; text-align: justify; justify-content: center; position: absolute; color: white; font-size: 21.64px; font-family: Poppins, sans-serif; font-weight: 300;">
+                <span style="font-weight: 1000;">Waluya Aquarium </span> is a specialized freshwater aquarium shop located
+                in Dramaga, Bogor. It offers a wide
+                selection of freshwater fish, aquatic plants, and high-quality aquarium supplies. Whether you're looking for
+                ornamental fish, aquascaping materials, or expert advice, Waluya Aquarium provides everything you need to
+                create and maintain a beautiful freshwater aquarium. With a focus on quality and customer satisfaction, it’s
+                the go-to destination for freshwater aquarists in the area.
+            </h1>
+        </div>
+        <div
+            style="width: 1443px; height: 287px; left: -3px; top: 1700px; position: absolute; background: linear-gradient(#FFFFFF 73% #999999 0%)">
+        </div>
+        <div
+            style="width: 1443px; height: 287px; left: -3px; top: 783px; position: absolute; background: linear-gradient(360deg, white 0%, rgba(255, 255, 255, 0.51) 51%, rgba(153, 153, 153, 0) 100%)">
+        </div>
+        <img style="left: 800px; top: 210px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 457.31px; font-family: Rubik Glitch Pop; font-weight: 400; word-wrap: break-word; text-shadow: 0px 4px 143px rgba(249, 250, 255, 1.00); z-index: 2;"
+            src="{% static 'img/W copy 3.png' %}" />
+        <div
+            style="width: 1440px; height: 562px; left: 0px; top: 3519px; position: absolute; background: linear-gradient(180deg, rgba(88.27, 157.74, 255, 0) 5%, #589EFF 71%, #355F99 100%)">
+        </div>
+        <div style="width: 51px; height: 51px; left: 46px; top: 3601px; position: absolute;">
+        </div>
+        <div
+            style="left: 115px; top: 3537px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 32px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            @waluya_aquarium</div>
+        <div
+            style="width: 517px; height: 447px; left: 879px; top: 2961px; position: absolute; background: #15388F; box-shadow: 0px 14px 31px rgba(0, 0, 0, 0.10); border-radius: 24px">
+        </div>
+        <div
+            style="left: 1038px; top: 2980px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 20px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            Send Us A Message</div>
+        <button class="type"
+            style="left: 902px; top: 3045px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #589EFF; font-size: 15px; font-family: Poppins, sans-serif; font-weight: 400; word-wrap: break-word;">
+            <div class="text">Type your message</div>
+        </button>
+        <button class="youremail"
+            style="left: 902px; top: 2965px; position: absolute; align-items:center; vertical-align: middle; display:flex; flex-direction:row; color: #589EFF; font-size: 15px; font-family: Poppins,sans-serif; font-weight: 400; word-wrap: break-word">
+            <div class="text">Your E-mail</div>
+        </button>
+        <button class="Send"
+            style="left: 902px; top: 3320px; position: relative; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 20px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            Send </button>
+        <div
+            style="width: 322px; height: 397px; left: 32px; top: 2385px; position: absolute; background: #545454; box-shadow: 0px 11px 24px rgba(0, 0, 0, 0.10); border-radius: 12px">
+        </div>
+        <img class="img"
+            style="width: 322px; height: 397px; left: 32px; top: 2385px; position: absolute; border-radius: 12px; filter: brightness(0.7);"
+            src="{% static 'img/DSCF6742.JPG' %}" />
+        <div
+            style="left: 80px; top: 2724px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #D9D9D9; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            Peralatan Aquarium</div>
+        <div
+            style="width: 322px; height: 397px; left: 1085px; top: 2385px; position: absolute; background: #545454; box-shadow: 0px 11px 24px rgba(0, 0, 0, 0.10); border-radius: 12px">
+        </div>
+        <img class="img"
+            style="width: 322px; height: 397px; left: 1085px; top: 2385px; position: absolute; border-radius: 12px; filter: brightness(0.7);"
+            src="{% static 'img/DSCF6718.JPG' %}" />
+        <div
+            style="left: 1218px; top: 2724px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #D9D9D9; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            Ikan</div>
+        <div
+            style="width: 322px; height: 397px; left: 734px; top: 2385px; position: absolute; background: #545454; box-shadow: 0px 11px 24px rgba(0, 0, 0, 0.10); border-radius: 12px">
+        </div>
+        <img class="img"
+            style="width: 322px; height: 397px; left: 734px; top: 2385px; position: absolute; border-radius: 12px; filter: brightness(0.7);"
+            src="{% static 'img/DSCF6731.JPG' %}" />
+        <div
+            style="left: 835px; top: 2724px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #D9D9D9; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            Obat Ikan</div>
+        <div
+            style="width: 322px; height: 397px; left: 383px; top: 2385px; position: absolute; background: #545454; box-shadow: 0px 11px 24px rgba(0, 0, 0, 0.10); border-radius: 12px">
+        </div>
+        <img class="img"
+            style="width: 322px; height: 397px; left: 383px; top: 2385px; position:absolute; border-radius: 12px; filter: brightness(0.7);"
+            src="{% static 'img/20250208_092728.jpg' %}" />
+        <div
+            style="left: 455px; top: 2724px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #D9D9D9; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            Makanan ikan</div>
+        <div style="width: 51px; height: 51px; left: 47px; top: 3537px; position: absolute;">
+    
+            <img style="width: 51px; height: 51px; left: 5px; top: 60px; position: absolute;" src="{% static 'img/Frame copy.png' %}" />
+            <img style="width: 51px; height: 51px; left: 5px; top: -8px; position: absolute;" src="{% static 'img/Frame.png' %}" />
+        </div>
+        <div
+            style="left: 115px; top: 3604px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 32px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word">
+            081808880816 (Tria) </div>
+        <div style="width: 32px; height: 32px; left: 403px; top: 4030px; position: absolute;">
+            <img style="width: 26.67px; height: 26.67px; left: 2.67px; top: 2.67px; position: absolute;"
+                src="{% static 'img/Frame copy 2.png' %}" />
+        </div>
+        <div
+            style="left: 442px; top: 4032px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #1E1E1E; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 400; word-wrap: break-word">
+            2025 - 2029 Waluya Aquarium All Right Reserved</div>
+        <div style="width: 1440px; height: 100px; left: 0px; top: 0px; position: absolute; background: white; z-index: 2;">
+        </div>
+        <div
+            style="left: 96px; top: 36px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word; z-index: 2;">
+            Waluya Aquarium</div>
+        <button class="Tentang"
+            style="left: 560px; top: 35px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word; border: none; background-color: #FFFFFF;z-index: 2;">
+            Tentang kami</button>
+        <button class="Tentang"
+            style="left: 765px; top: 35px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word; border: none; background-color: #FFFFFF;z-index: 2;">
+            Produk kami</button>
+        <button class="Tentang"
+            style="left: 954px; top: 35px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word; border: none; background-color: #FFFFFF;z-index: 2;">
+            Wishlist</button>
+        <button class="Register"
+            style="left: 1270px; top: 30px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 24px; font-family: Poppins,sans-serif; font-weight: 700; word-wrap: break-word; z-index: 2;">
+            Register</button>
+        <button class="Login"
+            style="left: 1100px; top: 30px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 24px; font-family: Poppins, sans-serif; font-weight: 700; word-wrap: break-word; z-index: 2;">
+            Login</button>
+        <img style="left: 34px; top: 25px; position: absolute; justify-content: center; display: flex; flex-direction: column; color: #15388F; font-size: 64px; font-family: Rubik Glitch Pop; font-weight: 400; word-wrap: break-word; z-index: 2;"
+            src="{% static 'img/W.png' %}" />
+    </div>
 </body>
 </html>

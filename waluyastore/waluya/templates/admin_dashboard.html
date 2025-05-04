@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Waluya Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+        h1 {
+            margin-bottom: 30px;
+        }
+        .model-list {
+            list-style: none;
+            padding: 0;
+        }
+        .model-item {
+            margin-bottom: 15px;
+        }
+        .model-name {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .model-links a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #2c7be5;
+        }
+        .model-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Waluya Admin Dashboard</h1>
+
+    <ul class="model-list">
+        {% for model in models_info %}
+        <li class="model-item">
+            <div class="model-name">{{ model.name }}</div>
+            <div class="model-links">
+                <a href="{{ model.add_url }}">➕ Add</a>
+                <a href="{{ model.change_url }}">📝 Change</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

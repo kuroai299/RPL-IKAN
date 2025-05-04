@@ -29,13 +29,21 @@ class FishFoodForm(forms.ModelForm):
 from django import forms
 
 class AdminLoginForm(forms.Form):
-    email = forms.EmailField(max_length=255)
-    password = forms.CharField(widget=forms.PasswordInput)
-
-    # Jika Anda ingin menambahkan validasi custom
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        return email
+    email = forms.EmailField(
+        max_length=255,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'E-mail',
+            'required': True,
+            'class': 'input-field'  # gunakan class sesuai CSS kamu
+        })
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Password',
+            'required': True,
+            'class': 'input-field'
+        })
+    )
 
 
 # Form untuk sign-up user biasa
