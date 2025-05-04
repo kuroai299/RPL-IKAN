@@ -10,3 +10,21 @@ waluyastore/db.sqlite3
 # Ignore pycache directories in specific subfolders
 waluyastore/waluya/__pycache__/
 waluyastore/waluyastore/__pycache__/
+
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+
+# SQLite DB (jika tidak dibutuhkan)
+*.sqlite3
+
+# VSCode
+.vscode/
+
+# Environment
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
