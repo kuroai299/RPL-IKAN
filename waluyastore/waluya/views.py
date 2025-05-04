@@ -239,5 +239,20 @@ def contact_admin(request):
         form = MessageForm(initial={'email': request.user.email})
     return render(request, 'contact_admin.html', {'form': form})
 
+from django.urls import reverse
 
+@login_required
+def admin_dashboard(request):
+    if not request.user.is_superuser:
+        return redirect('landing_page')
+
+    models_info = [
+        {'name': 'Fish', 'add_url': '/add_product/?category=Fish', 'change_url': '/custom-admin/product_list/?category=Fish'},
+        {'name': 'Fish Medicine', 'add_url': '/add_product/?category=FishMedicine', 'change_url': '/custom-admin/product_list/?category=FishMedicine'},
+        {'name': 'Aquarium Stuff', 'add_url': '/add_product/?category=AquariumStuff', 'change_url': '/custom-admin/product_list/?category=AquariumStuff'},
+        {'name': 'Fish Food', 'add_url': '/add_product/?category=FishFood', 'change_url': '/custom-admin/product_list/?category=FishFood'},
+        {'name': 'Message', 'add_url': '#', 'change_url': '/admin/waluya/message/'},  # ini langsung ke admin bawaan
+    ]
+
+    return render(request, 'admin_dashboard.html', {'models_info': models_info})
 

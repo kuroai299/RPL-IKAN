@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        function updateFormFields() {
+            const selectedCategory = document.getElementById('category').value;
+            const sections = ['fish', 'fishmedicine', 'aquariumstuff', 'fishfood'];
+    
+            sections.forEach(cat => {
+                const section = document.getElementById(`${cat}-fields`);
+                section.style.display = (cat === selectedCategory.toLowerCase()) ? 'block' : 'none';
+            });
+        }
+        document.addEventListener("DOMContentLoaded", updateFormFields);
+    </script>
+    
     <title>Admin Product List</title>
+
 </head>
 <body>
     <h1>{{ category }} Products - Admin</h1>
