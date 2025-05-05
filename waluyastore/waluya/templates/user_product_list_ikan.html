@@ -18,27 +18,40 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#">Tentang Kami</a></li>
-                <li><a href="#">Produk Kami</a></li>
-                <li><a href="#">Wishlist Kami</a></li>
+                <li><a href="#">Produk Kami</a>
+                    <!-- Dropdown Produk Kami -->
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user_product_list_ikan' %}?category=Fish">Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_makanan_ikan' %}?category=FishFood">Makanan Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_obat_ikan' %}?category=FishMedicine">Obat Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Wishlist</a></li>
             </ul>
             <div class="buttons">
-                <button class="login-button">Login</button>
-                <button class="register-button">Register</button>
+                <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
             </div>
         </nav>
     </header>
 
     <h1 class="section-title">IKAN</h1>
     <div class="search-bar">
-        <img src="asset/bx-search-alt-2.svg" alt="Search Icon" class="search-icon">
-        <input type="text" placeholder="Search here">
+        <img src="{% static 'img/bx-search-alt-2.svg' %}" alt="Search Icon" class="search-icon">
+        <!-- Form pencarian dengan GET method -->
+        <form method="get" action="{% url 'user_product_list_ikan' %}">
+            <input type="text" name="search" placeholder="Search here" value="{{ request.GET.search }}">
+            <button type="submit" style="display: none;"></button> <!-- Tombol submit tersembunyi -->
+        </form>
     </div>
+    
 
     <div class="card-container" id="cardContainer">
         <!-- Kartu produk akan muncul di sini berdasarkan data -->
     </div>
 
-    <div class="pagination" id="pagination">
+    <ul class="pagination" id="pagination">
         <li class="page-item previous-page disable"><a class="page-link" href="#"> < </a></li>
         <li class="page-item current-page active"><a class="page-link" href="#">1</a></li>
         <li class="page-item current-page"><a class="page-link" href="#">2</a></li>
@@ -46,7 +59,7 @@
         <li class="page-item current-page"><a class="page-link" href="#">4</a></li>
         <li class="page-item current-page"><a class="page-link" href="#">5</a></li>
         <li class="page-item next-page"><a class="page-link" href="#"> > </a></li>
-    </div>
+    </ul>
 
     <script type="text/javascript">
         // Konfigurasi Pagination
@@ -80,15 +93,14 @@
         // Fungsi untuk membuat produk dan menambahkannya ke dalam container
         function createProductCards(products) {
             const container = document.getElementById('cardContainer');
-            container.innerHTML = ''; // Clear previous cards
+            container.innerHTML = '';  // Clear previous cards
             products.forEach(product => {
                 const card = document.createElement('div');
                 card.classList.add('card');
-
                 const cardImage = document.createElement('div');
                 cardImage.classList.add('card-image');
                 const img = document.createElement('img');
-                img.src = "asset/Frame 26.png"; // Placeholder image for the products
+                img.src = "{% static 'img/Frame 26.png' %}"; // Placeholder image for the products
                 cardImage.appendChild(img);
 
                 const cardContent = document.createElement('div');
@@ -107,11 +119,10 @@
             });
         }
 
-        // Fungsi untuk membentuk pagination berdasarkan halaman yang dipilih
-        // Function to create the pagination buttons
+        // Fungsi untuk membuat pagination berdasarkan jumlah halaman
         function createPagination(totalPages) {
             const pagination = document.querySelector(".pagination");
-            pagination.innerHTML = ''; // Clear existing pagination
+            pagination.innerHTML = '';  // Clear existing pagination
 
             // Add previous button
             pagination.innerHTML += `
@@ -151,40 +162,41 @@
                 </li>
             `;
         }
-
-
-        // Fungsi untuk menampilkan halaman yang dipilih
+        
+        // Fungsi untuk menampilkan produk pada halaman yang dipilih
         function showPage(page) {
             const cards = $(".card-container .card");
             const totalPages = Math.ceil(cards.length / itemsPerPage);
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
 
-            cards.hide().slice(start, end).show(); // Tampilkan hanya produk untuk halaman tersebut
-            generatePagination(page, totalPages); // Pembaruan pagination berdasarkan halaman yang aktif
+            cards.hide().slice(start, end).show(); // Menyembunyikan produk yang tidak di halaman ini
+            createPagination(totalPages); // Mengupdate pagination berdasarkan halaman yang aktif
         }
 
         // Setup untuk pagination dan event klik
+        let currentPage = 1;
+
         $(document).ready(function () {
             createProductCards(products); // Membuat produk yang ada
 
             const totalPages = Math.ceil(products.length / itemsPerPage); // Hitung jumlah total halaman
-            showPage(1); // Tampilkan halaman pertama secara default
+            showPage(currentPage); // Tampilkan halaman pertama secara default
 
-            $(document).on("click", ".pagination li.current-page", function () {
-                const page = parseInt($(this).text());
-                showPage(page); // Panggil fungsi untuk tampilkan halaman yang dipilih
-            });
+            // Event untuk tombol pagination (current page)
+            $(document).on("click", ".pagination li.page-item", function () {
+                if ($(this).hasClass('active') || $(this).hasClass('disable')) return;
 
-            $(document).on("click", ".previous-page", function () {
-                const currentPage = $(".pagination li.active").text();
-                showPage(Math.max(1, currentPage - 1)); // Pindah ke halaman sebelumnya
-            });
+                const page = $(this).text().trim();
+                if (page === "<") {
+                    currentPage = Math.max(1, currentPage - 1);
+                } else if (page === ">") {
+                    currentPage = Math.min(totalPages, currentPage + 1);
+                } else {
+                    currentPage = parseInt(page);
+                }
 
-            $(document).on("click", ".next-page", function () {
-                const currentPage = $(".pagination li.active").text();
-                const totalPages = Math.ceil(products.length / itemsPerPage);
-                showPage(Math.min(totalPages, currentPage + 1)); // Pindah ke halaman berikutnya
+                showPage(currentPage); // Panggil fungsi untuk tampilkan halaman yang dipilih
             });
         });
 

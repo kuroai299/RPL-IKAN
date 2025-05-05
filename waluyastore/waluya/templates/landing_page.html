@@ -24,21 +24,36 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#">Tentang Kami</a></li>
-                <li><a href="#">Produk Kami</a></li>
-                <li><a href="#">Wishlist Kami</a></li>
+                <li><a href="#">Produk Kami</a>
+                    <!-- Dropdown Produk Kami -->
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user_product_list_ikan' %}?category=Fish">Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_makanan_ikan' %}?category=FishFood">Makanan Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_obat_ikan' %}?category=FishMedicine">Obat Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Wishlist</a></li>
             </ul>
             <div class="buttons">
-                <button class="login-button">Login</button>
-                <button class="register-button">Register</button>
+                {% if request.user.is_authenticated %}
+                    <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+                {% else %}
+                    <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                    <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+                {% endif %}
             </div>
         </nav>
     </header>
+    
+    
 
     <section class="hero">
         <div class="hero-overlay">
         <div class="hero-text">
             <h1>Your Trusted Freshwater Aquarium Shop in <br>Dramaga, Bogor</h1>
-            <button>About us</button>
+            <button onclick="window.location.href='#produk-kami'">Explore Our Products</button>
+
         </div>
         <div class="hero-image">
             <img src="{% static 'img/W copy 3.png' %}" alt="W logo" />
@@ -52,11 +67,11 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <!-- New Image -->
-                <img src="{% static 'img/carousel1.png' %}" class="d-block w-100 p-5" alt="Slide 1">
+                <img src="{% static 'img/carousel1.png' %}" class="d-block w-100" alt="Slide 1">
             </div>
             <div class="carousel-item">
                 <!-- New Image -->
-                <img src="{% static 'img/carousel1.png' %}" class="d-block w-100 p-5" alt="Slide 2">
+                <img src="{% static 'img/carousel1.png' %}" class="d-block w-100" alt="Slide 2">
             </div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#whoCarousel" data-bs-slide="prev">
@@ -67,28 +82,46 @@
         </button>
     </div>
 </section>
+
   
-  <section class="section">
+<section class="section" id="produk-kami">
     <h2>Produk Kami</h2>
     <div class="products">
-      <div class="product">
-        <img src="{% static 'img/DSCF6742.JPG' %}" alt="Peralatan Aquarium" />
-        <label>Peralatan Aquarium</label>
-      </div>
-      <div class="product">
-        <img src="{% static 'img/20250208_092728.jpg' %}" alt="Makanan Ikan" />
-        <label>Makanan Ikan</label>
-      </div>
-      <div class="product">
-        <img src="{% static 'img/DSCF6731.JPG' %}" alt="Obat Ikan" />
-        <label>Obat Ikan</label>
-      </div>
-      <div class="product">
-        <img src="{% static 'img/DSCF6718.JPG' %}" alt="Ikan Hias" />
-        <label>Ikan</label>
-      </div>
+        <!-- Link untuk kategori Peralatan Aquarium -->
+        <div class="product">
+            <a href="{% url 'user_product_list_barang_akuarium' %}">
+                <img src="{% static 'img/DSCF6742.JPG' %}" alt="Peralatan Aquarium" />
+                <label>Peralatan Aquarium</label>
+            </a>
+        </div>
+        
+        <!-- Link untuk kategori Makanan Ikan -->
+        <div class="product">
+            <a href="{% url 'user_product_list_makanan_ikan' %}">
+                <img src="{% static 'img/20250208_092728.jpg' %}" alt="Makanan Ikan" />
+                <label>Makanan Ikan</label>
+            </a>
+        </div>
+        
+        <!-- Link untuk kategori Obat Ikan -->
+        <div class="product">
+            <a href="{% url 'user_product_list_obat_ikan' %}">
+                <img src="{% static 'img/DSCF6731.JPG' %}" alt="Obat Ikan" />
+                <label>Obat Ikan</label>
+            </a>
+        </div>
+        
+        <!-- Link untuk kategori Ikan -->
+        <div class="product">
+            <a href="{% url 'user_product_list_ikan' %}">
+                <img src="{% static 'img/DSCF6718.JPG' %}" alt="Ikan Hias" />
+                <label>Ikan</label>
+            </a>
+        </div>
     </div>
-  </section>
+</section>
+
+
 
   <section class="contact-section">
     <div class="map">

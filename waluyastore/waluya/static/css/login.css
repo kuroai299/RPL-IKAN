@@ -18,8 +18,8 @@ body {
 
 .gambar {
     position: relative;
-    width: 1000px;
-    height: 475px;
+    width: 900px;
+    height: 525px;
     border-radius: 10px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -178,4 +178,13 @@ form {
     width: 100%;
     height: 100%;
     object-fit: contain;
+}
+
+.error-message {
+    color: red !important;        
+    font-size: 12px !important;    
+    margin-top: 5px;               
+    padding-bottom: 0;
+    list-style-type: none;        
+    font-weight: normal;          
 }

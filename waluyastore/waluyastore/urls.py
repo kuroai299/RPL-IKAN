@@ -34,7 +34,10 @@ urlpatterns = [
     path('remove_from_wishlist/<int:wishlist_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
     path('contact_admin/', views.contact_admin, name='contact_admin'),
-    path('user/product_list/', views.user_product_list, name='user_product_list'),
+    path('ikan/', views.user_product_list_ikan, name='user_product_list_ikan'),  # Kategori Ikan
+    path('obat_ikan/', views.user_product_list_obat_ikan, name='user_product_list_obat_ikan'),  # Kategori Obat Ikan
+    path('barang_akuarium/', views.user_product_list_barang_akuarium, name='user_product_list_barang_akuarium'),  # Kategori Barang Akuarium
+    path('makanan_ikan/', views.user_product_list_makanan_ikan, name='user_product_list_makanan_ikan'),  # Kategori Makanan Ikan
     path('custom-admin/product_list/', views.product_list, name='product_list'),
     path('custom-admin/', views.admin_dashboard, name='admin_dashboard'),
 

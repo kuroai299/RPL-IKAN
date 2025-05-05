@@ -26,6 +26,50 @@ header {
     height: 60px;
 }
 
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;                      /* Jarak antar item navbar */
+    margin: 0;
+}
+
+/* Style untuk navbar dan dropdown */
+.navbar .nav-links li {
+    position: relative;
+}
+
+/* Menyembunyikan dropdown menu secara default */
+.navbar .nav-links .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    padding: 10px 0;
+    border-radius: 5px;
+}
+
+/* Menampilkan dropdown menu saat hover pada 'Produk Kami' */
+.navbar .nav-links li:hover .dropdown-menu {
+    display: block;
+}
+
+/* Style untuk link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a {
+    display: block;
+    padding: 8px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+/* Efek hover pada link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a:hover {
+    background-color: #f8f8f8;
+}
+
 .navbar {
     background-color: white;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
@@ -75,6 +119,7 @@ header {
     display: flex;
     gap: 10px; /* Ensure there's space between the buttons */
     align-items: center;
+    margin-left: 8px; /* Adjust margin as needed */
 }
 .buttons button {
     margin-left: 9px;
@@ -98,7 +143,7 @@ header {
 }
 
 .login-button:active {
-    opacity: 0.3;
+    opacity: 0.5;
 }
 
 .buttons .register-button {
@@ -125,7 +170,6 @@ header {
     justify-content: flex-start;
     text-align: left;
     color: white;
-    background: url('/static/img/DSCF6764.JPG') center/cover no-repeat;
     background: linear-gradient(rgba(29, 28, 135, 0.312), rgba(0, 0, 0, 0.5)), url('/static/img/DSCF6764.JPG') center/cover no-repeat;
     position: relative;
     height: 45vw;
@@ -182,6 +226,10 @@ header {
     height: auto; /* Membiarkan proporsi tetap */
 }
 
+
+button:hover {
+    background-color: #d3d3d3;
+}
 /* Section Layout */
 .section {
     padding: 80px 50px;
@@ -198,35 +246,39 @@ header {
 
 .carousel-item {
     flex: 0 0 100%;  /* Setiap item mengambil 100% dari ruang yang tersedia */
-    transition: transform 0.5s ease-in-out; /* Transition yang halus saat pergantian gambar */
+    transition: transform 0.8s ease, opacity 0.8s ease; /* Transition yang halus saat pergantian gambar */
     position: relative;
     border-radius: 15px; /* Add border radius to each carousel item */
     overflow: hidden; 
 }
 
 .carousel-item img {
-    width: 100%;
-    height: 600px;
-    object-fit: cover;
+    width: 80%;
+    height: auto;
+    transition: transform 0.8s ease, opacity 0.8s ease;
     overflow: hidden;
-    border-radius: 15px;
+    border-radius: 20px;
+    object-fit: contain;
+    box-shadow: #1e1e1ed3 0px 50px 100px 0px; /* Add shadow to images */
+    
 }
 
 .carousel-item.active img {
-    transform: scale(1.1);
-    border-radius: 15px; /* Slightly zoom the active image for emphasis */
+    transform: scale(0.7);
+    opacity: 1; /* Slightly zoom the active image for emphasis */
+    
 }
 .carousel-item:not(.active) img {
     opacity: 0.5; /* Make inactive images more transparent */
     filter: brightness(0.7); /* Darken sneak peek images */
-    border-radius: 15px;
+    transform: scale(0.6);
 }
 /* Sneak Peek (Navigation arrows) */
 
 .carousel-control-prev, .carousel-control-next {
     position: absolute;
     top: 45%;
-    transform: translateY(-50%);
+    transform: translateY(-45%);
     width: 3%; /* Smaller width for the arrows */
     z-index: 10;
     background: none; /* No background */
@@ -240,11 +292,13 @@ header {
 
 
 .products {
-    display: grid;
+    display: flex;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 24px;
     max-width: 1200px;
     margin: 0 auto;
+    justify-content: center;
+    align-items: center;
 }
 
 .product {
@@ -270,10 +324,12 @@ header {
     position: absolute;
     bottom: 20px;
     left: 20px;
+    justify-content: left;
     color: #fff;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 16px;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    display: block;
 }
 
 /* Contact Section */

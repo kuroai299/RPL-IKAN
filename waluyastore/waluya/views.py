@@ -10,15 +10,24 @@ from django.contrib import messages
 
 # ==================== USER MANAGEMENT ====================
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from .forms import UserSignupForm
+from django.contrib.auth import login
+
 def user_signup(request):
     if request.method == 'POST':
         form = UserSignupForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('user_login')
+            user = form.save()  # Simpan user baru
+            # Setelah menyimpan user baru, login otomatis
+            login(request, user)
+            return redirect('landing_page')  # Arahkan ke halaman landing setelah sukses signup
     else:
-        form = UserSignupForm()
+        form = UserSignupForm()  # Jika GET, tampilkan form kosong
+    
     return render(request, 'sign_up.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -181,52 +190,22 @@ def product_detail(request, product_id):
             continue
     return HttpResponse("Product not found", status=404)
 
-
-@login_required
-def user_product_list(request):
-    category = request.GET.get('category', 'Fish')
+# Halaman Produk Ikan
+def user_product_list_ikan(request):
     search_query = request.GET.get('search', '')
     order_by = request.GET.get('order_by', '')
     filter_size = request.GET.get('size', '')
     filter_color = request.GET.get('color', '')
-    filter_medicine_type = request.GET.get('medicine_type', '')
-    filter_stuff_type = request.GET.get('stuff_type', '')
-    filter_food_type = request.GET.get('food_type', '')
 
-    if category == 'Fish':
-        products = Fish.objects.all()
-        if search_query:
-            products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
-        if filter_size:
-            products = products.filter(size=filter_size)
-        if filter_color:
-            products = products.filter(color=filter_color)
-    elif category == 'FishMedicine':
-        products = FishMedicine.objects.all()
-        if search_query:
-            products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
-        if filter_medicine_type:
-            products = products.filter(medicine_type=filter_medicine_type)
-    elif category == 'AquariumStuff':
-        products = AquariumStuff.objects.all()
-        if search_query:
-            products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
-        if filter_stuff_type:
-            products = products.filter(stuff_type=filter_stuff_type)
-    elif category == 'FishFood':
-        products = FishFood.objects.all()
-        if search_query:
-            products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
-        if filter_food_type:
-            products = products.filter(food_type=filter_food_type)
-    else:
-        products = Product.objects.none()
-
-    # 🔎 Search logic
+    products = Fish.objects.all()
     if search_query:
         products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+    if filter_size:
+        products = products.filter(size=filter_size)
+    if filter_color:
+        products = products.filter(color=filter_color)
 
-    # 🔃 Sorting logic
+    # Sorting logic
     if order_by == 'name_asc':
         products = products.order_by('name')
     elif order_by == 'name_desc':
@@ -236,7 +215,80 @@ def user_product_list(request):
     elif order_by == 'price_desc':
         products = products.order_by('-price')
 
-    return render(request, 'user_product_list.html', {'products': products, 'category': category})
+    return render(request, 'user_product_list_ikan.html', {'products': products})
+
+# Halaman Produk Obat Ikan
+def user_product_list_obat_ikan(request):
+    search_query = request.GET.get('search', '')
+    order_by = request.GET.get('order_by', '')
+    filter_medicine_type = request.GET.get('medicine_type', '')
+
+    products = FishMedicine.objects.all()
+    if search_query:
+        products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+    if filter_medicine_type:
+        products = products.filter(medicine_type=filter_medicine_type)
+
+    # Sorting logic
+    if order_by == 'name_asc':
+        products = products.order_by('name')
+    elif order_by == 'name_desc':
+        products = products.order_by('-name')
+    elif order_by == 'price_asc':
+        products = products.order_by('price')
+    elif order_by == 'price_desc':
+        products = products.order_by('-price')
+
+    return render(request, 'user_product_list_obat_ikan.html', {'products': products})
+
+# Halaman Produk Barang Akuarium
+def user_product_list_barang_akuarium(request):
+    search_query = request.GET.get('search', '')
+    order_by = request.GET.get('order_by', '')
+    filter_stuff_type = request.GET.get('stuff_type', '')
+
+    products = AquariumStuff.objects.all()
+    if search_query:
+        products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+    if filter_stuff_type:
+        products = products.filter(stuff_type=filter_stuff_type)
+
+    # Sorting logic
+    if order_by == 'name_asc':
+        products = products.order_by('name')
+    elif order_by == 'name_desc':
+        products = products.order_by('-name')
+    elif order_by == 'price_asc':
+        products = products.order_by('price')
+    elif order_by == 'price_desc':
+        products = products.order_by('-price')
+
+    return render(request, 'user_product_list_barang_akuarium.html', {'products': products})
+
+# Halaman Produk Makanan Ikan
+def user_product_list_makanan_ikan(request):
+    search_query = request.GET.get('search', '')
+    order_by = request.GET.get('order_by', '')
+    filter_food_type = request.GET.get('food_type', '')
+
+    products = FishFood.objects.all()
+    if search_query:
+        products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+    if filter_food_type:
+        products = products.filter(food_type=filter_food_type)
+
+    # Sorting logic
+    if order_by == 'name_asc':
+        products = products.order_by('name')
+    elif order_by == 'name_desc':
+        products = products.order_by('-name')
+    elif order_by == 'price_asc':
+        products = products.order_by('price')
+    elif order_by == 'price_desc':
+        products = products.order_by('-price')
+
+    return render(request, 'user_product_list_makanan_ikan.html', {'products': products})
+
 
 @login_required
 def contact_admin(request):

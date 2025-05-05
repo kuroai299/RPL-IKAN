@@ -25,19 +25,39 @@
                 <p>or use your E-mail account for registration</p>
                 <div class="input-box">
                     <input type="text" name="username" placeholder="Username" required autocomplete="name">
+                    {% if form.username.errors %}
+                        <ul>
+                            {% for error in form.username.errors %}
+                                <li class="error-message">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
+                
                 <div class="input-box">
                     <input type="email" name="email" placeholder="E-mail" required autocomplete="email">
+                    {% if form.email.errors %}
+                        <ul>
+                            {% for error in form.email.errors %}
+                                <li class="error-message">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
+                
                 <div class="input-box">
                     <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
+                    {% if form.password.errors %}
+                        <ul>
+                            {% for error in form.password.errors %}
+                                <li class="error-message">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
-                <div class="forgotpass-link">
-                    <a href="#">Forgot your password?</a>
-                </div>
+                
                 <button type="submit" class="signup-button">Sign Up</button>
                 <p class="login">Already have an account? <a href="{% url 'user_login' %}" class="login-link">Login here</a></p>
-            </form>
         </div>
 
         <div class="left-section">

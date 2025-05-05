@@ -31,19 +31,27 @@
 
             <p>or use your E-mail account</p>
 
-            <div class="input-box">{{ form.email }}</div>
-            <div class="input-box">{{ form.password }}</div>
-
-            {% if form.errors %}
-                <ul>
-                    {% for field in form %}
-                        {% for error in field.errors %}
-                            <li style="color:red">{{ error }}</li>
+            <div class="input-box">
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <ul>
+                        {% for error in form.email.errors %}
+                            <li class="error-message">{{ error }}</li>  <!-- Pesan error di sini -->
                         {% endfor %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
+                    </ul>
+                {% endif %}
+            </div>
 
+            <div class="input-box">
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <ul>
+                        {% for error in form.password.errors %}
+                            <li class="error-message">{{ error }}</li>  <!-- Pesan error di sini -->
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
             <div class="forgotpass-link"><a href="#">Forgot your password?</a></div>
 
             <button type="submit" class="signin-button">Sign in</button>

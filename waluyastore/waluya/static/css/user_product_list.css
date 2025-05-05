@@ -67,6 +67,47 @@ header {
     font-weight: 700;
 }
 
+.navbar .nav-links li {
+    position: relative;
+}
+
+/* Menyembunyikan dropdown menu secara default */
+.navbar .nav-links .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    padding: 10px 0;
+    border-radius: 5px;
+    min-width: 160px; /* Menetapkan lebar minimum untuk dropdown */
+    width: auto;
+    transition: opacity 0.3s ease-in-out;
+    list-style-type: none; /* Menghapus bullet */
+    padding-left: 0; /* Menghapus indentasi */
+}
+
+/* Menampilkan dropdown menu saat hover pada 'Produk Kami' */
+.navbar .nav-links li:hover .dropdown-menu {
+    display: block;
+}
+
+/* Style untuk link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a {
+    display: block;
+    padding: 5px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+/* Efek hover pada link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a:hover {
+    background-color: #f8f8f8;
+}
+
 /* Navbar Button Styles */
 .buttons button {
     margin-left: 15px;
@@ -221,6 +262,13 @@ header {
     margin: 5px;
 }
 
+.pagination .page-item.active{
+    background: #22559C;
+    width: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
 .previous-page, .next-page{
     background: #22559C;
     width: 38px;
@@ -242,6 +290,7 @@ header {
     border-radius: 50%;
     cursor: pointer;
 }
+
 
 .previous-page:hover{
     transform: translateX(-5px);
