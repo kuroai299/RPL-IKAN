@@ -14,7 +14,8 @@
 <body>
     <div class="gambar">
         <div class="formbox">
-            <form action="">
+            <form method="POST" action="{% url 'sign_up' %}">
+                {% csrf_token %}
                 <h1>Create Your Account</h1>
                 <div class="social-icons">
                     <img src="{% static 'img/google.png' %}" alt="Google">
@@ -23,19 +24,19 @@
                 </div>
                 <p>or use your E-mail account for registration</p>
                 <div class="input-box">
-                    <input type="text" placeholder="Username" required>
+                    <input type="text" name="username" placeholder="Username" required autocomplete="name">
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="E-mail" required>
+                    <input type="email" name="email" placeholder="E-mail" required autocomplete="email">
                 </div>
                 <div class="input-box">
-                    <input type="password" placeholder="Password" required>
+                    <input type="password" name="password" placeholder="Password" required autocomplete="new-password">
                 </div>
                 <div class="forgotpass-link">
                     <a href="#">Forgot your password?</a>
                 </div>
                 <button type="submit" class="signup-button">Sign Up</button>
-                <p class="login">Already have an account? <a href="#" class="login-link">Login here</a></p>
+                <p class="login">Already have an account? <a href="{% url 'user_login' %}" class="login-link">Login here</a></p>
             </form>
         </div>
 

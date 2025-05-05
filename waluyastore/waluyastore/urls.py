@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing_page, name='landing_page'),  # Landing page untuk semua user
     path('login/', views.user_login, name='user_login'),  # Login untuk semua pengguna
-    path('sign_up/', views.user_signup, name='user_signup'),  # Sign-up hanya untuk user biasa
+    path('sign_up/', views.user_signup, name='sign_up'),  # Sign-up hanya untuk user biasa
     path('admin/dashboard/', views.admin_dashboard, name='admin_dashboard'),# Hanya untuk admin
     path('logout/', views.logout_view, name='logout'),  # Logout untuk semua user
     path('add_product/', views.add_product, name='add_product'),

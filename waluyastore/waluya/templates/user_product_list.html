@@ -1,185 +1,196 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product List</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-        }
-    
-        h1, h3 {
-            color: #333;
-        }
-    
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-    
-        label {
-            font-weight: bold;
-        }
-    
-        input[type="text"], select {
-            padding: 5px 8px;
-            font-size: 14px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-    
-        button[type="submit"] {
-            padding: 6px 12px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-    
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-    
-        a.reset-link {
-            color: #dc3545;
-            text-decoration: none;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-    
-        a.reset-link:hover {
-            text-decoration: underline;
-        }
-    
-        ul {
-            padding-left: 20px;
-        }
-    
-        li {
-            margin-bottom: 10px;
-        }
-    
-        a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-    
-        a:hover {
-            text-decoration: underline;
-        }
-    
-        .product-name-highlight {
-            font-weight: bold;
-            background-color: yellow;
-        }
-    </style>
-    
+    <title>Katalog Ikan</title>
+    <link rel="stylesheet" href="{% static 'css/user_product_list.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>{{ category }} Products</h1>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="{% static 'img/W biru.png' %}" alt="Waluya logo" class="logo-navbar">
+                <span class="nama-brand">Waluya Aquarium</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Tentang Kami</a></li>
+                <li><a href="#">Produk Kami</a></li>
+                <li><a href="#">Wishlist Kami</a></li>
+            </ul>
+            <div class="buttons">
+                <button class="login-button">Login</button>
+                <button class="register-button">Register</button>
+            </div>
+        </nav>
+    </header>
 
-    <!-- Filter and sorting options -->
-    <h3>Filter Products</h3>
-    <form method="GET">
-        <input type="hidden" name="category" value="{{ category }}">
-        <label for="search">Search:</label>
-        <input type="text" name="search" id="search" value="{{ request.GET.search }}">
-
-        <!-- Sorting options -->
-        <label for="order_by">Sort by:</label>
-        <select name="order_by" id="order_by">
-            <option value="name_asc" {% if request.GET.order_by == "name_asc" %}selected{% endif %}>Name A-Z</option>
-            <option value="name_desc" {% if request.GET.order_by == "name_desc" %}selected{% endif %}>Name Z-A</option>
-            <option value="price_asc" {% if request.GET.order_by == "price_asc" %}selected{% endif %}>Price (Low to High)</option>
-            <option value="price_desc" {% if request.GET.order_by == "price_desc" %}selected{% endif %}>Price (High to Low)</option>
-        </select>
-
-
-        
-
-
-        <!-- Category-specific filters -->
-        {% if category == "Fish" %}
-            <label for="size">Size:</label>
-            <select name="size" id="size">
-                <option value="">All Sizes</option>
-                <option value="small" {% if request.GET.size == "small" %}selected{% endif %}>Small</option>
-                <option value="medium" {% if request.GET.size == "medium" %}selected{% endif %}>Medium</option>
-                <option value="large" {% if request.GET.size == "large" %}selected{% endif %}>Large</option>
-            </select>
-
-            <label for="color">Color:</label>
-            <select name="color" id="color">
-                <option value="">All Colors</option>
-                <option value="dark" {% if request.GET.color == "dark" %}selected{% endif %}>Dark</option>
-                <option value="light" {% if request.GET.color == "light" %}selected{% endif %}>Light</option>
-            </select>
-        {% endif %}
-
-        {% if category == "FishMedicine" %}
-            <label for="medicine_type">Medicine Type:</label>
-            <select name="medicine_type" id="medicine_type">
-                <option value="">All Types</option>
-                <option value="herbal" {% if request.GET.medicine_type == "herbal" %}selected{% endif %}>Herbal</option>
-                <option value="chemical" {% if request.GET.medicine_type == "chemical" %}selected{% endif %}>Chemical</option>
-            </select>
-        {% endif %}
-
-        {% if category == "AquariumStuff" %}
-            <label for="stuff_type">Stuff Type:</label>
-            <select name="stuff_type" id="stuff_type">
-                <option value="">All Types</option>
-                <option value="filter" {% if request.GET.stuff_type == "filter" %}selected{% endif %}>Filter</option>
-                <option value="waterpump" {% if request.GET.stuff_type == "waterpump" %}selected{% endif %}>Water Pump</option>
-                <option value="aeration" {% if request.GET.stuff_type == "aeration" %}selected{% endif %}>Aeration</option>
-                <option value="accessory" {% if request.GET.stuff_type == "accessory" %}selected{% endif %}>Accessory</option>
-            </select>
-        {% endif %}
-
-        {% if category == "FishFood" %}
-            <label for="food_type">Food Type:</label>
-            <select name="food_type" id="food_type">
-                <option value="">All Types</option>
-                <option value="organic" {% if request.GET.food_type == "organic" %}selected{% endif %}>Organic</option>
-                <option value="processed" {% if request.GET.food_type == "processed" %}selected{% endif %}>Processed</option>
-            </select>
-        {% endif %}
-
-        <button type="submit">Filter</button>
-        <a href="?category={{ category }}" class="reset-link">Reset Filter</a>
-    </form>
-
-    <!-- Product list -->
-    <h3>Products</h3>
-    {% if products %}
-        <ul>
-            {% for product in products %}
-                <li>
-                    <a href="{% url 'product_detail' product.id %}"><strong>{{ product.name }}</strong></a> - {{ product.price }}
-                    {% if user.is_superuser %}
-                    <a href="{% url 'edit_product' product.id %}">Edit</a> |
-                    <a href="{% url 'delete_product' product.id %}">Delete</a>
-                    {% else %}
-                    <a href="{% url 'add_to_wishlist' product.id %}">Add to Wishlist</a>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No products available in this category.</p>
-    {% endif %}
-
-    <!-- Tombol Kembali -->
-    <div style="margin-top: 20px;">
-    <a href="{% url 'landing_page' %}">← Kembali ke Halaman Utama</a>
+    <h1 class="section-title">IKAN</h1>
+    <div class="search-bar">
+        <img src="asset/bx-search-alt-2.svg" alt="Search Icon" class="search-icon">
+        <input type="text" placeholder="Search here">
     </div>
 
+    <div class="card-container" id="cardContainer">
+        <!-- Kartu produk akan muncul di sini berdasarkan data -->
+    </div>
+
+    <div class="pagination" id="pagination">
+        <li class="page-item previous-page disable"><a class="page-link" href="#"> < </a></li>
+        <li class="page-item current-page active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item current-page"><a class="page-link" href="#">2</a></li>
+        <li class="page-item current-page"><a class="page-link" href="#">3</a></li>
+        <li class="page-item current-page"><a class="page-link" href="#">4</a></li>
+        <li class="page-item current-page"><a class="page-link" href="#">5</a></li>
+        <li class="page-item next-page"><a class="page-link" href="#"> > </a></li>
+    </div>
+
+    <script type="text/javascript">
+        // Konfigurasi Pagination
+        const itemsPerPage = 16;
+        const paginationSize = 5;
+
+        // Sample Data Produk
+        const products = [
+            { name: 'Ikan Discus 1', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 1' },
+            { name: 'Ikan Discus 2', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 2' },
+            { name: 'Ikan Discus 3', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 3' },
+            { name: 'Ikan Discus 4', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 4' },
+            { name: 'Ikan Discus 5', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 5' },
+            { name: 'Ikan Discus 6', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 6' },
+            { name: 'Ikan Discus 7', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 7' },
+            { name: 'Ikan Discus 8', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 8' },
+            { name: 'Ikan Discus 9', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 9' },
+            { name: 'Ikan Discus 10', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 10' },
+            { name: 'Ikan Discus 11', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 11' },
+            { name: 'Ikan Discus 12', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 12' },
+            { name: 'Ikan Discus 13', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 13' },
+            { name: 'Ikan Discus 14', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 14' },
+            { name: 'Ikan Discus 15', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 15' },
+            { name: 'Ikan Discus 16', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 16' },
+            { name: 'Ikan Discus 17', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 17' },
+            { name: 'Ikan Discus 18', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 18' },
+            { name: 'Ikan Discus 19', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 19' },
+            { name: 'Ikan Discus 20', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 20' }
+        ];
+
+        // Fungsi untuk membuat produk dan menambahkannya ke dalam container
+        function createProductCards(products) {
+            const container = document.getElementById('cardContainer');
+            container.innerHTML = ''; // Clear previous cards
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                const cardImage = document.createElement('div');
+                cardImage.classList.add('card-image');
+                const img = document.createElement('img');
+                img.src = "asset/Frame 26.png"; // Placeholder image for the products
+                cardImage.appendChild(img);
+
+                const cardContent = document.createElement('div');
+                cardContent.classList.add('card-content');
+                const title = document.createElement('h3');
+                title.textContent = product.name;
+                const desc = document.createElement('p');
+                desc.textContent = product.description;
+
+                cardContent.appendChild(title);
+                cardContent.appendChild(desc);
+                card.appendChild(cardImage);
+                card.appendChild(cardContent);
+
+                container.appendChild(card);
+            });
+        }
+
+        // Fungsi untuk membentuk pagination berdasarkan halaman yang dipilih
+        // Function to create the pagination buttons
+        function createPagination(totalPages) {
+            const pagination = document.querySelector(".pagination");
+            pagination.innerHTML = ''; // Clear existing pagination
+
+            // Add previous button
+            pagination.innerHTML += `
+                <li class="page-item previous-page ${currentPage === 1 ? 'disable' : ''}">
+                    <a class="page-link" href="#"> < </a>
+                </li>
+            `;
+
+            let pageNumbers = [];
+
+            // Calculate which page numbers to display
+            if (totalPages <= paginationSize) {
+                pageNumbers = [...Array(totalPages).keys()].map(i => i + 1);
+            } else {
+                if (currentPage <= 3) {
+                    pageNumbers = [...Array(paginationSize).keys()].map(i => i + 1);
+                } else if (currentPage + 2 >= totalPages) {
+                    pageNumbers = [...Array(paginationSize).keys()].map(i => totalPages - paginationSize + 1 + i);
+                } else {
+                    pageNumbers = [...Array(paginationSize).keys()].map(i => currentPage - 2 + i);
+                }
+            }
+
+            // Add page number buttons
+            pageNumbers.forEach(number => {
+                pagination.innerHTML += `
+                    <li class="page-item ${currentPage === number ? 'active' : ''}">
+                        <a class="page-link" href="#">${number}</a>
+                    </li>
+                `;
+            });
+
+            // Add next button
+            pagination.innerHTML += `
+                <li class="page-item next-page ${currentPage === totalPages ? 'disable' : ''}">
+                    <a class="page-link" href="#"> > </a>
+                </li>
+            `;
+        }
+
+
+        // Fungsi untuk menampilkan halaman yang dipilih
+        function showPage(page) {
+            const cards = $(".card-container .card");
+            const totalPages = Math.ceil(cards.length / itemsPerPage);
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+
+            cards.hide().slice(start, end).show(); // Tampilkan hanya produk untuk halaman tersebut
+            generatePagination(page, totalPages); // Pembaruan pagination berdasarkan halaman yang aktif
+        }
+
+        // Setup untuk pagination dan event klik
+        $(document).ready(function () {
+            createProductCards(products); // Membuat produk yang ada
+
+            const totalPages = Math.ceil(products.length / itemsPerPage); // Hitung jumlah total halaman
+            showPage(1); // Tampilkan halaman pertama secara default
+
+            $(document).on("click", ".pagination li.current-page", function () {
+                const page = parseInt($(this).text());
+                showPage(page); // Panggil fungsi untuk tampilkan halaman yang dipilih
+            });
+
+            $(document).on("click", ".previous-page", function () {
+                const currentPage = $(".pagination li.active").text();
+                showPage(Math.max(1, currentPage - 1)); // Pindah ke halaman sebelumnya
+            });
+
+            $(document).on("click", ".next-page", function () {
+                const currentPage = $(".pagination li.active").text();
+                const totalPages = Math.ceil(products.length / itemsPerPage);
+                showPage(Math.min(totalPages, currentPage + 1)); // Pindah ke halaman berikutnya
+            });
+        });
+
+    </script>
 </body>
+<footer class="footer-gradient">
+    <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>
+</footer>
 </html>

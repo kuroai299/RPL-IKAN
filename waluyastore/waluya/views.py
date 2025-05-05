@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.contrib import messages
 
 # ==================== USER MANAGEMENT ====================
 
@@ -68,6 +69,18 @@ def add_to_wishlist(request, product_id):
 def wishlist(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
+@login_required
+def remove_from_wishlist(request, wishlist_id):
+    try:
+        wishlist_item = Wishlist.objects.get(id=wishlist_id, user=request.user)
+        wishlist_item.delete()
+        messages.success(request, "Produk berhasil dihapus dari wishlist.")
+    except Wishlist.DoesNotExist:
+        messages.error(request, "Produk tidak ditemukan di wishlist.")
+    
+    return redirect('wishlist')
+
 
 # ==================== ADMIN CRUD (SUPERUSER ONLY) ====================
 

@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    color: black;
+}
+
+.body{
+    padding: 40px;
+    background: linear-gradient(to bottom, #ffffff 70%, #6ab4ff 100%);
+}
+
+
+header {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    height: 60px;
+}
+
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    width: 100%;
+}
+
+/* Navbar Logo and Links */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-navbar {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.nama-brand {
+    font-weight: 700;
+    color: #22559C;
+}
+
+/* Navbar Links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #22559C;
+    font-weight: 700;
+}
+
+/* Navbar Button Styles */
+.buttons button {
+    margin-left: 15px;
+    padding: 6px 15px;
+    border-radius: 5px;
+    font-weight: 700;
+    color: #22559C;
+    border: 1px solid #22559C;
+    cursor: pointer;
+    background-color: white;
+}
+
+.login-button {
+    transition: opacity 0.5s;
+}
+
+.login-button:hover {
+    opacity: 0.5;
+}
+
+.login-button:active {
+    opacity: 0.3;
+}
+
+.buttons .register-button {
+    color: white;
+    background-color: #22559C;
+    transition: opacity 1s;
+}
+
+.register-button:hover {
+    opacity: 0.7;
+}
+
+.register-button:active {
+    opacity: 0.5;
+}
+
+.section-title{
+    text-align: center;
+    color: #22559C;
+    margin-top: 20px;
+    font-size: 47px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 2px solid #15388f;
+    border-radius: 30px;
+    padding: 10px 20px;
+    width: 800px;
+    margin: 0 auto 40px; /* Tengah dan beri jarak bawah */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+.search-bar .search-icon{
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+.search-bar input{
+    border: none;
+    outline: none;
+    flex: 1;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
+
+.card {
+    background-color: #C3DCFF;
+    border-radius: 12px;
+    width: 100%;
+    padding: 15px;
+    max-width: 220px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-image{
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-image img {
+    width: 100%;
+    max-width: 190px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 0 5px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-content h3{
+    color:#22559C;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-content p{
+    color:#22559C;
+    font-size: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4; /* Batasi ke 3 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-description {
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+
+.pagination {
+    text-align: center;
+    margin: 30px 30px 60px;
+    user-select: none;
+}
+
+.pagination li{
+    display:inline-block;
+    margin: 5px;
+}
+
+.previous-page, .next-page{
+    background: #22559C;
+    width: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.pagination li a {
+    color: #589EFF;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.current-page, .dots{
+    background: #ccc;
+    width: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.previous-page:hover{
+    transform: translateX(-5px);
+}
+
+.next-page:hover{
+    transform: translateX(5px);
+}
+
+.active{
+    background: #22559C;
+    color: white;
+}
+
+.disable{
+    background: #ccc;
+}
+
+.footer-gradient {
+    background: linear-gradient(to top, #6ab4ff, #ffffff ); /* Membalikkan arah gradasi */
+    text-align: center;
+    padding: 150px 0; /* Menambah padding atas dan bawah agar teks lebih turun */
+    color: #000;
+    font-size: 14px;
+}
+
