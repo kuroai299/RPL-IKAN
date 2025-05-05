@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,162 +46,25 @@
             <button type="submit" style="display: none;"></button> <!-- Tombol submit tersembunyi -->
         </form>
     </div>
-    
 
     <div class="card-container" id="cardContainer">
-        <!-- Kartu produk akan muncul di sini berdasarkan data -->
+        {% for product in products %}
+        <div class="card">
+            <div class="card-image">
+                <img src="{% static 'img/Frame 26.png' %}" alt="Ikan Image">
+            </div>
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:20 }}</p> <!-- Deskripsi terpotong -->
+                <p>Harga: Rp{{ product.price }}</p>
+                <p>Stok: {{ product.stock }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>No products found</p>
+        {% endfor %}
     </div>
 
-    <ul class="pagination" id="pagination">
-        <li class="page-item previous-page disable"><a class="page-link" href="#"> < </a></li>
-        <li class="page-item current-page active"><a class="page-link" href="#">1</a></li>
-        <li class="page-item current-page"><a class="page-link" href="#">2</a></li>
-        <li class="page-item current-page"><a class="page-link" href="#">3</a></li>
-        <li class="page-item current-page"><a class="page-link" href="#">4</a></li>
-        <li class="page-item current-page"><a class="page-link" href="#">5</a></li>
-        <li class="page-item next-page"><a class="page-link" href="#"> > </a></li>
-    </ul>
-
-    <script type="text/javascript">
-        // Konfigurasi Pagination
-        const itemsPerPage = 16;
-        const paginationSize = 5;
-
-        // Sample Data Produk
-        const products = [
-            { name: 'Ikan Discus 1', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 1' },
-            { name: 'Ikan Discus 2', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 2' },
-            { name: 'Ikan Discus 3', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 3' },
-            { name: 'Ikan Discus 4', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 4' },
-            { name: 'Ikan Discus 5', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 5' },
-            { name: 'Ikan Discus 6', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 6' },
-            { name: 'Ikan Discus 7', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 7' },
-            { name: 'Ikan Discus 8', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 8' },
-            { name: 'Ikan Discus 9', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 9' },
-            { name: 'Ikan Discus 10', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 10' },
-            { name: 'Ikan Discus 11', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 11' },
-            { name: 'Ikan Discus 12', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 12' },
-            { name: 'Ikan Discus 13', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 13' },
-            { name: 'Ikan Discus 14', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 14' },
-            { name: 'Ikan Discus 15', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 15' },
-            { name: 'Ikan Discus 16', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 16' },
-            { name: 'Ikan Discus 17', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 17' },
-            { name: 'Ikan Discus 18', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 18' },
-            { name: 'Ikan Discus 19', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 19' },
-            { name: 'Ikan Discus 20', description: 'Discus adalah salah satu ikan hias yang paling indah dan sering dipelihara. Mereka termasuk dalam genus Symphysodon. 20' }
-        ];
-
-        // Fungsi untuk membuat produk dan menambahkannya ke dalam container
-        function createProductCards(products) {
-            const container = document.getElementById('cardContainer');
-            container.innerHTML = '';  // Clear previous cards
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                const cardImage = document.createElement('div');
-                cardImage.classList.add('card-image');
-                const img = document.createElement('img');
-                img.src = "{% static 'img/Frame 26.png' %}"; // Placeholder image for the products
-                cardImage.appendChild(img);
-
-                const cardContent = document.createElement('div');
-                cardContent.classList.add('card-content');
-                const title = document.createElement('h3');
-                title.textContent = product.name;
-                const desc = document.createElement('p');
-                desc.textContent = product.description;
-
-                cardContent.appendChild(title);
-                cardContent.appendChild(desc);
-                card.appendChild(cardImage);
-                card.appendChild(cardContent);
-
-                container.appendChild(card);
-            });
-        }
-
-        // Fungsi untuk membuat pagination berdasarkan jumlah halaman
-        function createPagination(totalPages) {
-            const pagination = document.querySelector(".pagination");
-            pagination.innerHTML = '';  // Clear existing pagination
-
-            // Add previous button
-            pagination.innerHTML += `
-                <li class="page-item previous-page ${currentPage === 1 ? 'disable' : ''}">
-                    <a class="page-link" href="#"> < </a>
-                </li>
-            `;
-
-            let pageNumbers = [];
-
-            // Calculate which page numbers to display
-            if (totalPages <= paginationSize) {
-                pageNumbers = [...Array(totalPages).keys()].map(i => i + 1);
-            } else {
-                if (currentPage <= 3) {
-                    pageNumbers = [...Array(paginationSize).keys()].map(i => i + 1);
-                } else if (currentPage + 2 >= totalPages) {
-                    pageNumbers = [...Array(paginationSize).keys()].map(i => totalPages - paginationSize + 1 + i);
-                } else {
-                    pageNumbers = [...Array(paginationSize).keys()].map(i => currentPage - 2 + i);
-                }
-            }
-
-            // Add page number buttons
-            pageNumbers.forEach(number => {
-                pagination.innerHTML += `
-                    <li class="page-item ${currentPage === number ? 'active' : ''}">
-                        <a class="page-link" href="#">${number}</a>
-                    </li>
-                `;
-            });
-
-            // Add next button
-            pagination.innerHTML += `
-                <li class="page-item next-page ${currentPage === totalPages ? 'disable' : ''}">
-                    <a class="page-link" href="#"> > </a>
-                </li>
-            `;
-        }
-        
-        // Fungsi untuk menampilkan produk pada halaman yang dipilih
-        function showPage(page) {
-            const cards = $(".card-container .card");
-            const totalPages = Math.ceil(cards.length / itemsPerPage);
-            const start = (page - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-
-            cards.hide().slice(start, end).show(); // Menyembunyikan produk yang tidak di halaman ini
-            createPagination(totalPages); // Mengupdate pagination berdasarkan halaman yang aktif
-        }
-
-        // Setup untuk pagination dan event klik
-        let currentPage = 1;
-
-        $(document).ready(function () {
-            createProductCards(products); // Membuat produk yang ada
-
-            const totalPages = Math.ceil(products.length / itemsPerPage); // Hitung jumlah total halaman
-            showPage(currentPage); // Tampilkan halaman pertama secara default
-
-            // Event untuk tombol pagination (current page)
-            $(document).on("click", ".pagination li.page-item", function () {
-                if ($(this).hasClass('active') || $(this).hasClass('disable')) return;
-
-                const page = $(this).text().trim();
-                if (page === "<") {
-                    currentPage = Math.max(1, currentPage - 1);
-                } else if (page === ">") {
-                    currentPage = Math.min(totalPages, currentPage + 1);
-                } else {
-                    currentPage = parseInt(page);
-                }
-
-                showPage(currentPage); // Panggil fungsi untuk tampilkan halaman yang dipilih
-            });
-        });
-
-    </script>
 </body>
 <footer class="footer-gradient">
     <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>

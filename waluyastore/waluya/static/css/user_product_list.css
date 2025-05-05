@@ -251,64 +251,6 @@ header {
     position: relative;
 }
 
-.pagination {
-    text-align: center;
-    margin: 30px 30px 60px;
-    user-select: none;
-}
-
-.pagination li{
-    display:inline-block;
-    margin: 5px;
-}
-
-.pagination .page-item.active{
-    background: #22559C;
-    width: 38px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.previous-page, .next-page{
-    background: #22559C;
-    width: 38px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.pagination li a {
-    color: #589EFF;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 22px;
-}
-
-.current-page, .dots{
-    background: #ccc;
-    width: 38px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-
-.previous-page:hover{
-    transform: translateX(-5px);
-}
-
-.next-page:hover{
-    transform: translateX(5px);
-}
-
-.active{
-    background: #22559C;
-    color: white;
-}
-
-.disable{
-    background: #ccc;
-}
-
 .footer-gradient {
     background: linear-gradient(to top, #6ab4ff, #ffffff ); /* Membalikkan arah gradasi */
     text-align: center;

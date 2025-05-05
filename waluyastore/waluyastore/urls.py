@@ -40,6 +40,7 @@ urlpatterns = [
     path('makanan_ikan/', views.user_product_list_makanan_ikan, name='user_product_list_makanan_ikan'),  # Kategori Makanan Ikan
     path('custom-admin/product_list/', views.product_list, name='product_list'),
     path('custom-admin/', views.admin_dashboard, name='admin_dashboard'),
+    path('add_product/', views.add_product, name='add_product'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
