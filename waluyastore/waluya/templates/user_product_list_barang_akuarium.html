@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Katalog Peralatan Aquarium</title>
+    <link rel="stylesheet" href="{% static 'css/user_product_list.css' %}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="{% static 'img/W biru.png' %}" alt="Waluya logo" class="logo-navbar" />
+                <span class="nama-brand">Waluya Aquarium</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Tentang Kami</a></li>
+                <li><a href="#">Produk Kami</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user_product_list_ikan' %}?category=Fish">Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_makanan_ikan' %}?category=FishFood">Makanan Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_obat_ikan' %}?category=FishMedicine">Obat Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Wishlist</a></li>
+            </ul>
+            <div class="buttons">
+                <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+            </div>
+        </nav>
+    </header>
+
+    <h1 class="section-title">PERALATAN AQUARIUM</h1>
+    <div class="search-bar">
+        <img src="{% static 'img/bx-search-alt-2.svg' %}" alt="Search Icon" class="search-icon" />
+        <form method="get" action="{% url 'user_product_list_barang_akuarium' %}">
+            <input type="text" name="search" placeholder="Search here" value="{{ request.GET.search }}" />
+            <button type="submit" style="display: none;"></button>
+        </form>
+    </div>
+
+    <div class="card-container" id="cardContainer">
+        {% for product in products %}
+        <div class="card">
+            <div class="card-image">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+                {% else %}
+                    <img src="{% static 'img/default-product.png' %}" alt="No Image" />
+                {% endif %}
+            </div>
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description|truncatewords:20 }}</p>
+                <p>Harga: Rp{{ product.price }}</p>
+                <p>Stok: {{ product.stock }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>No products found</p>
+        {% endfor %}
+    </div>
+</body>
+<footer class="footer-gradient">
+    <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>
+</footer>
+</html>
