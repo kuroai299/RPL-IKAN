@@ -1,64 +1,122 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Wishlist</title>
-    {% comment %} ini untuk test pake gambar di wishlist yaa nanti hapus aja{% endcomment %}
-    <style> 
-        img {
-            height: 50px;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-    </style>
+    <title>Wishlist - Waluya Aquarium</title>
+    <link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+    <script src="{% static 'js/popup_catalog.js' %}" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <!-- 🔔 Flash Messages -->
-    {% if messages %}
-      <ul style="list-style:none; padding: 0;">
-        {% for message in messages %}
-          <li style="
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            background-color:
-                {% if message.tags == 'success' %}#d4edda
-                {% elif message.tags == 'warning' %}#fff3cd
-                {% elif message.tags == 'error' %}#f8d7da
-                {% elif message.tags == 'info' %}#cce5ff
-                {% endif %};
-            color: #000;
-          ">
-            {{ message }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-    
-    <h1>Your Wishlist</h1>
-
-    {% if wishlist_items %}
-        <ul>
-            {% for item in wishlist_items %}
-                <li>
-                    {% if item.product.image %}
-                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-                    {% endif %}
-                    <a href="{% url 'product_detail' item.product.id %}">
-                        <strong>{{ item.product.name }}</strong>
-                    </a> - Rp {{ item.product.price }}                    
-                    <form method="post" action="{% url 'remove_from_wishlist' item.id %}" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus item ini dari wishlist?')">
-                        {% csrf_token %}
-                        <button type="submit" class="remove-btn">Remove</button>
-                    </form>                    
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="{% static 'img/W biru.png' %}" alt="Waluya logo" class="logo-navbar">
+                <span class="nama-brand">Waluya Aquarium</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Tentang Kami</a></li>
+                <li><a href="#">Produk Kami</a>
+                    <!-- Dropdown Produk Kami -->
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user_product_list_ikan' %}?category=Fish">Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_makanan_ikan' %}?category=FishFood">Makanan Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_obat_ikan' %}?category=FishMedicine">Obat Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
+                    </ul>
                 </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Your wishlist is empty. Start browsing and add your favorite items!</p>
-    {% endif %}
+                <li><a href="#">Wishlist</a></li>
+            </ul>
+            <div class="buttons">
+                <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+            </div>
+        </nav>
+    </header>
 
-    <a href="{% url 'landing_page' %}">← Back to Home</a>
+    <div class="wishlist-wrapper">
+        <!-- Wishlist Header -->
+        <div class="wishlist-container">
+            <p class="section-title">Wishlist <span style="font-weight: 300; color: #22559C">({{ wishlist_items.count }})</span></p>
+
+            <!-- Filter Button -->
+            <div class="filter-container">
+                <button id="filterButton" class="filter-button">
+                    <img src="{% static 'img/filter-left.png' %}" alt="Filter Icon" class="filter-icon">
+                </button>
+            </div>
+            <!-- Filter Section -->
+            <div id="filterSection" class="filter-section">
+                <form method="get" action="{% url 'wishlist' %}">
+                    <div class="filter-group">
+                        <label for="categoryFilter">Kategori Produk:</label>
+                        <select name="category" id="categoryFilter">
+                            <option value="">-- Semua Kategori --</option>
+                            <option value="Fish" {% if request.GET.category == 'Fish' %}selected{% endif %}>Ikan</option>
+                            <option value="FishFood" {% if request.GET.category == 'FishFood' %}selected{% endif %}>Makanan Ikan</option>
+                            <option value="FishMedicine" {% if request.GET.category == 'FishMedicine' %}selected{% endif %}>Obat Ikan</option>
+                            <option value="AquariumStuff" {% if request.GET.category == 'AquariumStuff' %}selected{% endif %}>Peralatan Aquarium</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="filter-submit">Terapkan Filter</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Wishlist Items (Card Container) -->
+        <div class="card-container" id="cardContainer">
+            {% for item in wishlist_items %}
+            <div class="card" data-target="p-{{ item.product.id }}">
+                <div class="card-image">
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+                    {% else %}
+                        <img src="{% static 'img/default-product.png' %}" alt="No Image" />
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <h3>{{ item.product.name }}</h3>
+                    <p>{{ item.product.description|truncatewords:20 }}</p>
+                    <p>Harga: Rp{{ item.product.price }}</p>
+                    <p>Stok: {{ item.product.stock }}</p>
+                    <button class="wishlist-buttons" onclick="window.location.href='{% url 'remove_from_wishlist' item.id %}'">Hapus dari Wishlist</button>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products in wishlist</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="product-preview">
+        {% for item in wishlist_items %}
+        <div class="preview" data-target="p-{{ item.product.id }}">
+            <i class="fas fa-times"></i>
+            <div class="preview-left">
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                <h3>{{ item.product.name }}</h3>
+                <div class="preview-bottom">
+                    <div class="stock">Available Product: <strong>{{ item.product.stock }}</strong></div>
+                </div>
+            </div>
+            <div class="preview-right">
+                <p>{{ item.product.description }}</p>
+                <div class="price">
+                    <p class="angka">Price</p>
+                    <p class="nominal">Rp{{ item.product.price }}</p>
+                </div>
+                <button class="wishlist-buttons" onclick="window.location.href='{% url 'remove_from_wishlist' item.id %}'">Hapus dari Wishlist</button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <footer class="footer-gradient">
+        <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>
+    </footer>
 </body>
 </html>

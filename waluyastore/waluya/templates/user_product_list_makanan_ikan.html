@@ -9,6 +9,7 @@
     <title>Katalog Makanan Ikan</title>
     <link rel="stylesheet" href="{% static 'css/user_product_list.css' %}" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/popup_catalog.js' %}" defer></script>
 </head>
 <body>
     <header>
@@ -45,22 +46,86 @@
         </form>
     </div>
 
-    <div class="card-container" id="cardContainer">
-        {% for product in products %}
-        <div class="card">
-            <div class="card-image">
-                {% if product.image %}
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-                {% else %}
-                    <img src="{% static 'img/default-product.png' %}" alt="No Image" />
-                {% endif %}
+    <div class="products-wrapper">
+        <!-- Filter Section -->
+        <div class="filters-container">
+            <div class="filter-container">
+                <button id="filterButton" class="filter-button">
+                    <img src="{% static 'img/filter-left.png' %}" alt="Filter Icon" class="filter-icon">
+                </button>
             </div>
-            <div class="card-content">
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.description|truncatewords:20 }}</p>
-                <p>Harga: Rp{{ product.price }}</p>
-                <p>Stok: {{ product.stock }}</p>
+            <div id="filterSection" class="filter-section">
+                <form method="get" action="{% url 'user_product_list_makanan_ikan' %}">
+                    <div class="filter-group">
+                        <label for="orderBy">Urutkan sesuai:</label>
+                        <select name="order_by" id="orderBy">
+                            <option value="price_asc" {% if request.GET.order_by == 'price_asc' %}selected{% endif %}>Harga: Murah ke Mahal</option>
+                            <option value="price_desc" {% if request.GET.order_by == 'price_desc' %}selected{% endif %}>Harga: Mahal ke Murah</option>
+                            <option value="name_asc" {% if request.GET.order_by == 'name_asc' %}selected{% endif %}>Nama: A-Z</option>
+                            <option value="name_desc" {% if request.GET.order_by == 'name_desc' %}selected{% endif %}>Nama: Z-A</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="foodTypeFilter">Filter Jenis Makanan:</label>
+                        <select name="food_type" id="foodTypeFilter">
+                            <option value="">-- Semua Jenis --</option>
+                            <option value="organik" {% if request.GET.food_type == 'organik' %}selected{% endif %}>Organik</option>
+                            <option value="olahan" {% if request.GET.food_type == 'olahan' %}selected{% endif %}>Olahan</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="filter-submit">Terapkan Filter</button>
+                </form>
             </div>
         </div>
-        {% empty %}
-        <p
+
+        <div class="card-container" id="cardContainer">
+            {% for product in products %}
+            <div class="card" data-target="p-{{ product.id }}">
+                <div class="card-image">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+                    {% else %}
+                        <img src="{% static 'img/default-product.png' %}" alt="No Image" />
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:20 }}</p>
+                    <h4>Harga: Rp{{ product.price }}</h4>
+                    <h4>Stok: {{ product.stock }}</h4>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products found</p>
+            {% endfor %}
+        </div>
+
+        <!-- Product Preview Section -->
+        <div class="product-preview">
+            {% for product in products %}
+            <div class="preview" data-target="p-{{ product.id }}">
+                <i class="fas fa-times"></i>
+                <div class="preview-left">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <div class="preview-bottom">
+                        <div class="stock">Available Product: <strong>{{ product.stock }}</strong></div>
+                    </div>
+                </div>
+                <div class="preview-right">
+                    <p>{{ product.description }}</p>
+                    <div class="price">
+                        <p class="angka">Price</p>
+                        <p class="nominal">Rp{{ product.price }}</p>
+                    </div>
+                    <button class="wishlist-buttons">Masukkan ke Wishlist</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+<footer class="footer-gradient">
+    <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>
+</footer>
+</html>

@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog Ikan</title>
     <link rel="stylesheet" href="{% static 'css/user_product_list.css' %}">
+    <script src="{% static 'js/popup_catalog.js' %}" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -28,7 +29,7 @@
                         <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Wishlist</a></li>
+                <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
             </ul>
             <div class="buttons">
                 <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
@@ -47,22 +48,93 @@
         </form>
     </div>
 
-    <div class="card-container" id="cardContainer">
-        {% for product in products %}
-        <div class="card">
-            <div class="card-image">
-                <img src="{% static 'img/Frame 26.png' %}" alt="Ikan Image">
+    <div class="products-wrapper">
+    <!-- Wishlist Header -->
+        <div class="filters-container">
+            <!-- Filter Button -->
+            <div class="filter-container">
+                <button id="filterButton" class="filter-button">
+                    <img src="{% static 'img/filter-left.png' %}" alt="Filter Icon" class="filter-icon">
+                </button>
             </div>
-            <div class="card-content">
-                <h3>{{ product.name }}</h3>
-                <p>{{ product.description|truncatewords:20 }}</p> <!-- Deskripsi terpotong -->
-                <p>Harga: Rp{{ product.price }}</p>
-                <p>Stok: {{ product.stock }}</p>
+            <!-- Filter Section -->
+            <div id="filterSection" class="filter-section">
+                <form method="get" action="{% url 'user_product_list_ikan' %}">
+                    <div class="filter-group">
+                        <label for="orderBy">Urutkan sesuai:</label>
+                        <select name="order_by" id="orderBy">
+                            <option value="price_asc" {% if request.GET.order_by == 'price_asc' %}selected{% endif %}>Harga: Murah ke Mahal</option>
+                            <option value="price_desc" {% if request.GET.order_by == 'price_desc' %}selected{% endif %}>Harga: Mahal ke Murah</option>
+                            <option value="name_asc" {% if request.GET.order_by == 'name_asc' %}selected{% endif %}>Nama: A-Z</option>
+                            <option value="name_desc" {% if request.GET.order_by == 'name_desc' %}selected{% endif %}>Nama: Z-A</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="colorFilter">Filter Warna Ikan:</label>
+                        <select name="color" id="colorFilter">
+                            <option value="">-- Semua Warna --</option>
+                            <option value="gelap" {% if request.GET.color == 'gelap' %}selected{% endif %}>Gelap</option>
+                            <option value="terang" {% if request.GET.color == 'terang' %}selected{% endif %}>Terang</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="sizeFilter">Filter Ukuran Ikan:</label>
+                        <select name="size" id="sizeFilter">
+                            <option value="">-- Semua Ukuran --</option>
+                            <option value="kecil" {% if request.GET.size == 'kecil' %}selected{% endif %}>Kecil</option>
+                            <option value="sedang" {% if request.GET.size == 'sedang' %}selected{% endif %}>Sedang</option>
+                            <option value="besar" {% if request.GET.size == 'besar' %}selected{% endif %}>Besar</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="filter-submit">Terapkan Filter</button>
+                </form>
             </div>
         </div>
-        {% empty %}
-        <p>No products found</p>
-        {% endfor %}
+
+        <div class="card-container" id="cardContainer">
+            {% for product in products %}
+            <div class="card" data-target="p-{{ product.id }}">
+                <div class="card-image">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+                    {% else %}
+                        <img src="{% static 'img/default-product.png' %}" alt="No Image" />
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:20 }}</p> <!-- Deskripsi terpotong -->
+                    <h4>Harga: Rp{{ product.price }}</h4>
+                    <h4>Stok: {{ product.stock }}</h4>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products found</p>
+            {% endfor %}
+        </div>
+
+        <div class="product-preview">
+            {% for product in products %}
+            <div class="preview" data-target="p-{{ product.id }}">
+                <i class="fas fa-times"></i>
+                <div class="preview-left">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <div class="preview-bottom">
+                        <div class="stock">Available Product: <strong>{{ product.stock }}</strong></div>
+                    </div>
+                </div>
+                <div class="preview-right">
+                    <p>{{ product.description }}</p>
+                    <div class="price">
+                        <p class="angka">Price</p>
+                        <p class="nominal">Rp{{ product.price }}</p>
+                    </div>
+                    <button class="wishlist-buttons">Masukkan ke Wishlist</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
 </body>

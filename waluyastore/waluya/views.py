@@ -70,8 +70,15 @@ def add_to_wishlist(request, product_id):
 
 @login_required
 def wishlist(request):
+    category = request.GET.get('category', '')
+    
     wishlist_items = Wishlist.objects.filter(user=request.user)
+    
+    if category:
+        wishlist_items = wishlist_items.filter(product__category=category)
+    
     return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
+
 
 @login_required
 def remove_from_wishlist(request, wishlist_id):
