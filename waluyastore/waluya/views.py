@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
+from django.db import IntegrityError
+from django.views.decorators.csrf import csrf_protect
 
 # ==================== USER MANAGEMENT ====================
 
@@ -63,10 +65,51 @@ def landing_page(request):
 # ==================== WISHLIST ====================
 
 @login_required
+@csrf_protect
 def add_to_wishlist(request, product_id):
-    product = Product.objects.get(id=product_id)
-    Wishlist.objects.create(user=request.user, product=product)
-    return redirect('wishlist')
+    product = get_object_or_404(Product, id=product_id)
+    
+    # Check if this is an AJAX request
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    
+    try:
+        # Try to create a new wishlist item
+        wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
+        
+        if created:
+            success_message = f"{product.name} berhasil ditambahkan ke wishlist."
+        else:
+            success_message = f"{product.name} sudah ada di wishlist Anda."
+        
+        if is_ajax:
+            return JsonResponse({
+                'success': True,
+                'message': success_message,
+                'wishlist_id': wishlist_item.id
+            })
+        
+        messages.success(request, success_message)
+        return redirect('wishlist')
+        
+    except IntegrityError:
+        # Handle the case where the product is already in the wishlist
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'message': f"{product.name} sudah ada di wishlist Anda."
+            }, status=400)
+        
+        messages.error(request, f"{product.name} sudah ada di wishlist Anda.")
+        return redirect('wishlist')
+    except Exception as e:
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'message': f"Terjadi kesalahan: {str(e)}"
+            }, status=500)
+        
+        messages.error(request, f"Terjadi kesalahan: {str(e)}")
+        return redirect('wishlist')
 
 @login_required
 def wishlist(request):
@@ -75,21 +118,102 @@ def wishlist(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     
     if category:
-        wishlist_items = wishlist_items.filter(product__category=category)
+        # Filter by product type
+        if category == 'Fish':
+            wishlist_items = wishlist_items.filter(product__fish__isnull=False)
+        elif category == 'FishMedicine':
+            wishlist_items = wishlist_items.filter(product__fishmedicine__isnull=False)
+        elif category == 'AquariumStuff':
+            wishlist_items = wishlist_items.filter(product__aquariumstuff__isnull=False)
+        elif category == 'FishFood':
+            wishlist_items = wishlist_items.filter(product__fishfood__isnull=False)
+    
+    # Check if this is an AJAX request
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    
+    if is_ajax:
+        wishlist_data = []
+        for item in wishlist_items:
+            product_data = {
+                'id': item.product.id,
+                'name': item.product.name,
+                'description': item.product.description,
+                'price': str(item.product.price),
+                'stock': item.product.stock,
+                'image': item.product.image.url if item.product.image else None,
+                'wishlist_id': item.id
+            }
+            wishlist_data.append(product_data)
+        
+        return JsonResponse({'wishlist_items': wishlist_data})
     
     return render(request, 'wishlist.html', {'wishlist_items': wishlist_items})
 
 
 @login_required
+@csrf_protect
 def remove_from_wishlist(request, wishlist_id):
+    # Check if this is an AJAX request
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    
     try:
-        wishlist_item = Wishlist.objects.get(id=wishlist_id, user=request.user)
+        wishlist_item = get_object_or_404(Wishlist, id=wishlist_id, user=request.user)
+        product_name = wishlist_item.product.name
         wishlist_item.delete()
-        messages.success(request, "Produk berhasil dihapus dari wishlist.")
+        
+        success_message = f"{product_name} berhasil dihapus dari wishlist."
+        
+        if is_ajax:
+            return JsonResponse({
+                'success': True,
+                'message': success_message
+            })
+        
+        messages.success(request, success_message)
     except Wishlist.DoesNotExist:
-        messages.error(request, "Produk tidak ditemukan di wishlist.")
+        error_message = "Produk tidak ditemukan di wishlist."
+        
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'message': error_message
+            }, status=404)
+        
+        messages.error(request, error_message)
+    except Exception as e:
+        error_message = f"Terjadi kesalahan: {str(e)}"
+        
+        if is_ajax:
+            return JsonResponse({
+                'success': False,
+                'message': error_message
+            }, status=500)
+        
+        messages.error(request, error_message)
     
     return redirect('wishlist')
+
+@login_required
+@require_GET
+def check_wishlist(request, product_id):
+    """Check if a product is in the user's wishlist"""
+    try:
+        product = get_object_or_404(Product, id=product_id)
+        wishlist_item = Wishlist.objects.filter(user=request.user, product=product).first()
+        
+        if wishlist_item:
+            return JsonResponse({
+                'in_wishlist': True,
+                'wishlist_id': wishlist_item.id
+            })
+        else:
+            return JsonResponse({
+                'in_wishlist': False
+            })
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e)
+        }, status=500)
 
 # ==================== ADMIN DASHBOARD ====================
 
@@ -363,9 +487,22 @@ def product_detail(request, product_id):
     ]:
         try:
             product = model_class.objects.get(id=product_id)
+            
+            # Check if product is in user's wishlist
+            is_in_wishlist = False
+            wishlist_id = None
+            
+            if request.user.is_authenticated:
+                wishlist_item = Wishlist.objects.filter(user=request.user, product=product).first()
+                if wishlist_item:
+                    is_in_wishlist = True
+                    wishlist_id = wishlist_item.id
+                    
             return render(request, 'product_detail.html', {
                 'product': product,
-                'product_type': product_type
+                'product_type': product_type,
+                'is_in_wishlist': is_in_wishlist,
+                'wishlist_id': wishlist_id
             })
         except model_class.DoesNotExist:
             continue

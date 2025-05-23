@@ -9,6 +9,11 @@ class Wishlist(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Wishlist"
+    
+    class Meta:
+        # Ensure a user can't add the same product twice
+        unique_together = ('user', 'product')
+        ordering = ['-created_at']  # Sort by newest first
 
 
 # Create your models here.

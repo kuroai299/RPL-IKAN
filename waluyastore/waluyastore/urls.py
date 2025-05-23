@@ -31,6 +31,9 @@ urlpatterns = [
     path('wishlist/', views.wishlist, name='wishlist'),
     path('add_to_wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('remove_from_wishlist/<int:wishlist_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    
+    # New AJAX endpoints for wishlist
+    path('check_wishlist/<int:product_id>/', views.check_wishlist, name='check_wishlist'),
 
     # Product Detail for Users
     path('product/<int:product_id>/', views.product_detail, name='product_detail'),
@@ -48,4 +51,3 @@ urlpatterns = [
     # Contact admin (for sending messages to admin)
     path('contact_admin/', views.contact_admin, name='contact_admin'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-

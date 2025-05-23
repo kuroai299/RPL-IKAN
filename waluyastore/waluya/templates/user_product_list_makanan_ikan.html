@@ -10,6 +10,67 @@
     <link rel="stylesheet" href="{% static 'css/user_product_list.css' %}" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/popup_catalog.js' %}" defer></script>
+    <!-- Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* CSS untuk pesan dan tombol wishlist */
+        .messages {
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .wishlist-buttons {
+            background-color: #22559C;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .wishlist-buttons:hover {
+            background-color: #1a4480;
+        }
+        .wishlist-buttons.in-wishlist {
+            background-color: #28a745;
+        }
+        .wishlist-buttons.in-wishlist:hover {
+            background-color: #218838;
+        }
+        .wishlist-buttons:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .filter-section {
+            display: none;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .filter-section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -28,14 +89,33 @@
                         <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Wishlist</a></li>
+                <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
             </ul>
             <div class="buttons">
-                <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
-                <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+                {% if user.is_authenticated %}
+                   
+                    <button class="login-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+                {% else %}
+                    <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                    <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+                {% endif %}
             </div>
         </nav>
     </header>
+
+    <!-- Area untuk pesan -->
+    {% if messages %}
+    <div class="messages container">
+        {% for message in messages %}
+            <div class="{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
 
     <h1 class="section-title">MAKANAN IKAN</h1>
     <div class="search-bar">
@@ -118,12 +198,32 @@
                         <p class="angka">Price</p>
                         <p class="nominal">Rp{{ product.price }}</p>
                     </div>
-                    <button class="wishlist-buttons">Masukkan ke Wishlist</button>
+                    <!-- Tombol wishlist dengan class yang benar -->
+                    {% if user.is_authenticated %}
+                        {% if product.is_in_wishlist %}
+                            <button class="wishlist-buttons in-wishlist remove-from-wishlist-btn" 
+                                    data-product-id="{{ product.id }}" 
+                                    data-wishlist-id="{{ product.wishlist_id }}">
+                                <i class="fas fa-heart"></i> Hapus dari Wishlist
+                            </button>
+                        {% else %}
+                            <button class="wishlist-buttons add-to-wishlist-btn" 
+                                    data-product-id="{{ product.id }}">
+                                <i class="far fa-heart"></i> Tambah ke Wishlist
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <button class="wishlist-buttons" onclick="window.location.href='{% url 'user_login' %}'">
+                            <i class="far fa-heart"></i> Login untuk Wishlist
+                        </button>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
+
+    <script src="{% static 'js/wishlist.js' %}"></script>
 </body>
 <footer class="footer-gradient">
     <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>
