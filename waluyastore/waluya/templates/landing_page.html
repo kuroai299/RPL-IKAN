@@ -33,7 +33,7 @@
                         <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Wishlist</a></li>
+                <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
             </ul>
             <div class="buttons">
                 {% if request.user.is_authenticated %}
