@@ -12,61 +12,6 @@
     <script src="{% static 'js/popup_catalog.js' %}" defer></script>
     <!-- Font Awesome untuk ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        /* CSS untuk pesan dan tombol wishlist */
-        .messages {
-            padding: 10px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        .messages .success {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-        .messages .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 5px;
-        }
-        .wishlist-buttons {
-            background-color: #22559C;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .wishlist-buttons:hover {
-            background-color: #1a4480;
-        }
-        .wishlist-buttons.in-wishlist {
-            background-color: #28a745;
-        }
-        .wishlist-buttons.in-wishlist:hover {
-            background-color: #218838;
-        }
-        .filter-section {
-            display: none;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        .filter-section.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
 </head>
 <body>
     <header>
@@ -76,7 +21,7 @@
                 <span class="nama-brand">Waluya Aquarium</span>
             </div>
             <ul class="nav-links">
-                <li><a href="{% url 'landing_page' %}">Tentang Kami</a></li>>
+                <li><a href="{% url 'landing_page' %}">Tentang Kami</a></li>
                 <li><a href="#">Produk Kami</a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'user_product_list_ikan' %}?category=Fish">Ikan</a></li>

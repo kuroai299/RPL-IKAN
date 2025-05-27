@@ -1,0 +1,141 @@
+{% load widget_tweaks %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Kritik & Saran</title>
+    <link rel="stylesheet" href="{% static 'css/admin_message.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+   <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <a href="{% url 'admin_dashboard' %}" class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3h7v7H3z" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M3 14h7v7H3z" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 3h7v7h-7z" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 14h7v7h-7z" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <div class="nav-icon active">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" fill = "white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="logout-container">
+            <a href="/logout/" class="nav-icon logout-icon" title="Logout">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17L21 12L16 7" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12H9" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <header class="header">
+            <h1 class="title">Admin Dashboard</h1>
+            <h2 class="subtitle">User Messages</h2>
+        </header>
+
+        <!-- New Messages Section -->
+        <section>
+            <h3 class="section-heading new-msg">New Messages</h3>
+            <div class="card-container-new-msg masonry">
+                {% for message in new_messages %}
+                <div class="card">
+                    <div class="card-header">
+                        <img src="{{ message.avatar_url }}" alt="User Avatar" class="avatar" />
+                        <div class="user-info">
+                            <h3 class="username">{{ message.user.username }}</h3>
+                            <p class="date">{{ message.sent_at|date:"d F Y, H:i" }}</p>
+                        </div>
+                    </div>
+                    <div class="msg-box">
+                        <p>{{ message.content }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://mail.google.com/mail/?view=cm&to={{ message.email }}" target="_blank" rel="noopener" class="reply-button">Reply</a>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No new messages.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- All Messages Section -->
+        <section>
+            <h3 class="section-heading all-msg">All Messages</h3>
+            <div class="card-container masonry">
+                {% for message in all_messages %}
+                <div class="card">
+                    <div class="card-header">
+                        <img src="{{ message.avatar_url }}" alt="User Avatar" class="avatar" />
+                        <div class="user-info">
+                            <h3 class="username">{{ message.user.username }}</h3>
+                            <p class="date">{{ message.sent_at|date:"d F Y, H:i" }}</p>
+                        </div>
+                    </div>
+                    <div class="msg-box">
+                        <p>{{ message.content }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="https://mail.google.com/mail/?view=cm&to={{ message.email }}" target="_blank" rel="noopener" class="reply-button">Reply</a>
+                    </div>
+                </div>
+
+                {% empty %}
+                <p>No messages found.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+      // Initialize Masonry for both containers after page load
+      document.addEventListener('DOMContentLoaded', function () {
+          var gridNew = document.querySelector('.card-container-new-msg.masonry');
+          if(gridNew) {
+              new Masonry(gridNew, {
+                  itemSelector: '.card',
+                  columnWidth: '.card',
+                  percentPosition: true,
+                  gutter: 20,
+              });
+          }
+          var gridAll = document.querySelector('.card-container.masonry');
+          if(gridAll) {
+              new Masonry(gridAll, {
+                  itemSelector: '.card',
+                  columnWidth: '.card',
+                  percentPosition: true,
+                  gutter: 20,
+              });
+          }
+      });
+      new Masonry(gridNew, {
+        itemSelector: '.card',
+        columnWidth: 850,   // Tetapkan columnWidth 850px
+        gutter: 20,         // Jarak antar card
+        fitWidth: true,     // agar container pas sesuai total kolom
+        percentPosition: false
+    });
+
+    </script>
+</body>
+</html>

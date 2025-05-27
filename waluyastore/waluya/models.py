@@ -84,6 +84,8 @@ class Message(models.Model):
     email = models.EmailField()
     content = models.TextField()
     sent_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return f"Message from {self.email} at {self.sent_at}"

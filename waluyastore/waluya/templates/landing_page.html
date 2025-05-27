@@ -1,4 +1,6 @@
 {% load static %}
+{% load widget_tweaks %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,25 +122,63 @@
         </div>
     </div>
 </section>
-
-
-
   <section class="contact-section">
     <div class="map">
-      <h2>Our location</h2>
-      <img src="{% static 'img/GTA San Andreas map 1.png' %}" alt="Map Location">
-      <p>Jalan Perwira....</p>
+    <h2>Our location</h2>
+    <!-- Embed Google Maps iframe -->
+    <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.561274219941!2d106.75175997589405!3d-6.576918593416544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5234d4cea73%3A0xbf9e46e284ce11ed!2sWaluya%20Aquarium!5e0!3m2!1sen!2sid!4v1748322374846!5m2!1sen!2sid" 
+        width="460" 
+        height="300" 
+        frameborder="0" 
+        style="border:0" 
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <p>Pusat Ikan Hias, Jl. Letjen Ibrahim Adjie No.67, Laladon, Kec. Ciomas, Kota Bogor, Jawa Barat 16610</p>
     </div>
+
+
     <div class="contact">
       <h3>Send Us A Message</h3>
-      <form>
-        <input type="email" placeholder="Your E-mail" required />
-        <textarea rows="4" placeholder="Type your message" required></textarea>
-        <button type="submit">Send</button>
-      </form>
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'landing_page' %}#contact-admin" id="contact-admin">
+            {% csrf_token %}
+            {{ message_form.email|add_class:"form-control" }}
+            {{ message_form.content|add_class:"form-control" }}
+            <button type="submit">Send</button>
+        </form>
+        {% else %}
+        <p style="color: white;">Silakan <a href="{% url 'user_login' %}" style="color: #FFEE58;">login</a> untuk mengirim pesan.</p>
+        {% endif %}
     </div>
   </section>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelector('.flash-messages');
+            
+            if (flashMessages) {
+                // Set timeout untuk menghilangkan pesan setelah beberapa detik (contoh: 4 detik)
+                setTimeout(function() {
+                    flashMessages.style.transition = 'opacity 0.5s ease';
+                    flashMessages.style.opacity = '0'; // Mengurangi opacity agar tampak hilang
+                    setTimeout(function() {
+                        flashMessages.style.display = 'none'; // Menyembunyikan elemen setelah fade-out
+                    }, 500); // Waktu yang diperlukan untuk fade-out
+                }, 4000); // Setelah 4 detik pesan akan menghilang
+            }
+        });
+    </script>
   <footer>
     <p>📸 @waluya_aquarium | 📞 081808880816 (Tria)</p>
     <p>© 2025 – 2029 Waluya Aquarium All Right Reserved</p>

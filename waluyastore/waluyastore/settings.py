@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+import environ
 from pathlib import Path
+from dotenv import load_dotenv
 
+print("File .env ada:", os.path.exists('.env'))
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'waluya',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -135,4 +139,23 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = 'user_login'  # Ini akan memastikan pengguna yang belum login akan diarahkan ke halaman login
+
+# settings.py
+
+# Inisialisasi environ
+env = environ.Env()
+# Load file .env
+load_dotenv()
+# Baca file .env
+environ.Env.read_env()
+# Ambil variabel-variabel dari .env
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Konfigurasi email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 

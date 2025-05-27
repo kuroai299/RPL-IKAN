@@ -60,9 +60,6 @@ body {
   transition: var(--transition);
 }
 
-.logo:hover {
-  transform: scale(1.05);
-}
 
 .nav-icon {
   width: 48px;
@@ -909,7 +906,7 @@ body {
 
   .sidebar {
     width: 100%;
-    height: auto;
+    height: 80px;
     flex-direction: row;
     justify-content: space-around;
     padding: 10px 0;

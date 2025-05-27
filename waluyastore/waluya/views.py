@@ -9,6 +9,14 @@ from django.contrib.auth.models import User
 from django.views.decorators.http import require_GET, require_POST
 from django.db import IntegrityError
 from django.views.decorators.csrf import csrf_protect
+from .models import Message
+from .utils import get_gravatar_url
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.core.mail import send_mail
+from django.conf import settings
+
+
 
 # ==================== USER MANAGEMENT ====================
 
@@ -55,12 +63,43 @@ def logout_view(request):
     return redirect('landing_page')
 
 # ==================== LANDING PAGE ====================
-
 def landing_page(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('admin_dashboard')
-    return render(request, 'landing_page.html')
+
+        if request.method == 'POST':
+            form = MessageForm(request.POST)
+            if form.is_valid():
+                # Simpan pesan ke database
+                msg = form.save(commit=False)
+                msg.user = request.user
+                msg.save()
+
+                subject = f"Ulasan dari website"
+
+                # Kirim email ke admin
+                send_mail(
+                    subject,
+                    form.cleaned_data['content'],  # Body message
+                    form.cleaned_data['email'],  # From email
+                    ['waluyaaquarium@gmail.com'],  # To email (ganti dengan email admin)
+                    fail_silently=True,
+                )
+
+                # Tampilkan flash message setelah pesan terkirim
+                messages.success(request, "Pesan berhasil terkirim!")
+                return redirect('landing_page')
+        else:
+            form = MessageForm(initial={'email': request.user.email})
+    else:
+        form = None
+
+    return render(request, 'landing_page.html', {
+        'message_form': form
+    })
+
+
 
 # ==================== WISHLIST ====================
 
@@ -641,3 +680,33 @@ def product_detail_api(request, product_id):
         except model_class.DoesNotExist:
             continue
     return JsonResponse({'error': 'Product not found'}, status=404)
+
+@login_required
+def admin_message(request):
+
+
+    if not request.user.is_superuser:
+        return HttpResponseRedirect(reverse('landing_page') + '#contact-form')
+    
+    from .utils import get_gravatar_url
+    # Ambil pesan baru (belum dibaca)
+    new_messages = Message.objects.filter(is_read=False).order_by('-sent_at')
+    all_messages = Message.objects.all().order_by('-sent_at')
+    # Tambahkan URL Gravatar ke masing-masing message
+
+        # Tandai pesan sebagai dibaca setelah admin melihatnya
+    if new_messages:
+        for msg in new_messages:
+            msg.is_read = True
+            msg.save()
+    for msg in new_messages:
+        msg.avatar_url = get_gravatar_url(msg.email)
+
+    for msg in all_messages:
+        msg.avatar_url = get_gravatar_url(msg.email)
+
+    return render(request, 'admin_message.html', {
+        'new_messages': new_messages,
+        'all_messages': all_messages,
+    })
+

@@ -1,0 +1,263 @@
+/* Reset and base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+:root {
+  --primary: #1e40af;
+  --primary-light: #3b82f6;
+  --primary-lighter: #93c5fd;
+  --primary-lightest: #dbeafe;
+  --secondary: #0ea5e9;
+  --accent: #bae6fd;
+  --text-dark: #1e293b;
+  --text-medium: #475569;
+  --text-light: #94a3b8;
+  --background: #f8fafc;
+  --white: #ffffff;
+  --border: #e2e8f0;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-full: 9999px;
+  --transition: all 0.2s ease;
+}
+body {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--text-dark);
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 80px;
+  background-color: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  gap: 32px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+.logout-container {
+  margin-top: auto; /* Pastikan logout berada di bagian bawah */
+  padding: 20px 0;  /* Memberikan padding agar tidak terlalu rapat dengan elemen lain */
+}
+.logo {
+  width: 40px;
+  height: 40px;
+  color: var(--primary);
+  transition: var(--transition);
+}
+
+
+.nav-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.nav-icon:hover {
+  background-color: var(--primary-lightest);
+}
+
+.nav-icon.active {
+  background-color: var(--primary);
+}
+
+.nav-icon svg {
+  width: 24px;
+  height: 24px;
+}
+/* Main content */
+.main-content {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    padding: 32px 40px;
+}
+
+.header {
+    margin-bottom: 32px;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #15388F;
+    margin-bottom: 8px;
+    letter-spacing: -0.025em;
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #589EFF;
+    font-weight: 500;
+}
+
+/* Section headings */
+.section-heading {
+    font-size: 22px;
+    margin-bottom: 100px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.new-msg {
+    color: #FF5858;
+}
+
+.all-msg {
+    color: #15388F;
+}
+
+.new-msg, .all-msg {
+  margin-top: 50px;  /* Memberikan jarak antara judul dan card */
+}
+/* Masonry container for cards */
+.card-container,
+.card-container-new-msg {
+  display: flex;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Bikin grid otomatis */
+  gap: 20px; /* Jarak antar card */
+  max-width: 100%; /* Maksimal lebar container */
+  padding: 0px;
+  margin: 0 auto;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.section-heading {
+  margin-bottom: 20px;  /* Jarak di bawah judul agar tidak menempel ke card */
+}
+
+/* Card styling */
+.card {
+    background-color: #c3dcff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+    break-inside: avoid; /* important for masonry layout */
+    max-width: 300px;  /* batasi lebar card */
+    width: 100%;       /* agar responsive */
+    break-inside: avoid; /* penting untuk masonry */
+    box-sizing: border-box;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    border-radius: 50%;
+}
+
+.user-info .username {
+    color: #15388F;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.user-info .date {
+    color: #22559C;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.msg-box {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    line-height: 1.4;
+    color: #15388F;
+    font-size: 14px;
+    white-space: pre-wrap; /* preserve line breaks */
+}
+
+
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .card-container,
+    .card-container-new-msg {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: 80px; /* tinggi sidebar */
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    margin-left: 16px;
+  }
+
+  .nav-icon {
+    margin-right: 16px;
+  }
+  .card {
+    max-width: 100%;  /* mobile: 1 kolom */
+  }
+.logout-container {
+  margin-top: 0px; /* Pastikan logout berada di bagian bawah */
+}
+}
+@media (max-width: 480px) {
+    .title {
+        font-size: 24px;
+    }
+    .subtitle {
+        font-size: 16px;
+    }
+}
+
+.reply-button {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+}
+.reply-button:hover {
+    background-color: #45a049;
+}

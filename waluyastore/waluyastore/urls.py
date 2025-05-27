@@ -3,6 +3,7 @@ from django.urls import path
 from waluya import views  # pastikan ini mengarah ke folder yang benar
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # Admin URLs
@@ -50,4 +51,10 @@ urlpatterns = [
 
     # Contact admin (for sending messages to admin)
     path('contact_admin/', views.contact_admin, name='contact_admin'),
+    path('admin_message/', views.admin_message, name='admin_message'),
+    # Password Reset URLs
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
