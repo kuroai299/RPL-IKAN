@@ -1,0 +1,188 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Bootstrap CSS and JS for Carousel -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waluya Aquarium</title>
+  <link rel="stylesheet" href="{% static 'css/landing_page.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="{% static 'img/W biru.png' %}" alt="Waluya logo" class="logo-navbar">
+                <span class="nama-brand">Waluya Aquarium</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Tentang Kami</a></li>
+                <li><a href="#">Produk Kami</a>
+                    <!-- Dropdown Produk Kami -->
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user_product_list_ikan' %}?category=Fish">Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_makanan_ikan' %}?category=FishFood">Makanan Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_obat_ikan' %}?category=FishMedicine">Obat Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
+                    </ul>
+                </li>
+                <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+            </ul>
+            <div class="buttons">
+                {% if request.user.is_authenticated %}
+                    <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+                {% else %}
+                    <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                    <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    
+    
+
+    <section class="hero">
+        <div class="hero-overlay">
+        <div class="hero-text">
+            <h1>Your Trusted Freshwater Aquarium Shop in <br>Dramaga, Bogor</h1>
+            <button onclick="window.location.href='#produk-kami'">Explore Our Products</button>
+
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'img/W copy 3.png' %}" alt="W logo" />
+        </div>
+        </div>
+  </section>
+
+  <!-- Who Are We Carousel Section -->
+  <section style="position: relative;">
+    <div id="whoCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <!-- New Image -->
+                <img src="{% static 'img/carousel1.png' %}" class="d-block w-100" alt="Slide 1">
+            </div>
+            <div class="carousel-item">
+                <!-- New Image -->
+                <img src="{% static 'img/carousel1.png' %}" class="d-block w-100" alt="Slide 2">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#whoCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#whoCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</section>
+
+  
+<section class="section" id="produk-kami">
+    <h2>Produk Kami</h2>
+    <div class="products">
+        <!-- Link untuk kategori Peralatan Aquarium -->
+        <div class="product">
+            <a href="{% url 'user_product_list_barang_akuarium' %}">
+                <img src="{% static 'img/DSCF6742.JPG' %}" alt="Peralatan Aquarium" />
+                <label>Peralatan Aquarium</label>
+            </a>
+        </div>
+        
+        <!-- Link untuk kategori Makanan Ikan -->
+        <div class="product">
+            <a href="{% url 'user_product_list_makanan_ikan' %}">
+                <img src="{% static 'img/20250208_092728.jpg' %}" alt="Makanan Ikan" />
+                <label>Makanan Ikan</label>
+            </a>
+        </div>
+        
+        <!-- Link untuk kategori Obat Ikan -->
+        <div class="product">
+            <a href="{% url 'user_product_list_obat_ikan' %}">
+                <img src="{% static 'img/DSCF6731.JPG' %}" alt="Obat Ikan" />
+                <label>Obat Ikan</label>
+            </a>
+        </div>
+        
+        <!-- Link untuk kategori Ikan -->
+        <div class="product">
+            <a href="{% url 'user_product_list_ikan' %}">
+                <img src="{% static 'img/DSCF6718.JPG' %}" alt="Ikan Hias" />
+                <label>Ikan</label>
+            </a>
+        </div>
+    </div>
+</section>
+  <section class="contact-section">
+    <div class="map">
+    <h2>Our location</h2>
+    <!-- Embed Google Maps iframe -->
+    <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.561274219941!2d106.75175997589405!3d-6.576918593416544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c5234d4cea73%3A0xbf9e46e284ce11ed!2sWaluya%20Aquarium!5e0!3m2!1sen!2sid!4v1748322374846!5m2!1sen!2sid" 
+        width="460" 
+        height="300" 
+        frameborder="0" 
+        style="border:0" 
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <p>Pusat Ikan Hias, Jl. Letjen Ibrahim Adjie No.67, Laladon, Kec. Ciomas, Kota Bogor, Jawa Barat 16610</p>
+    </div>
+
+
+    <div class="contact">
+      <h3>Send Us A Message</h3>
+        {% if messages %}
+            <div class="flash-messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'landing_page' %}#contact-admin" id="contact-admin">
+            {% csrf_token %}
+            {{ message_form.email|add_class:"form-control" }}
+            {{ message_form.content|add_class:"form-control" }}
+            <button type="submit">Send</button>
+        </form>
+        {% else %}
+        <p style="color: white;">Silakan <a href="{% url 'user_login' %}" style="color: #FFEE58;">login</a> untuk mengirim pesan.</p>
+        {% endif %}
+    </div>
+  </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelector('.flash-messages');
+            
+            if (flashMessages) {
+                // Set timeout untuk menghilangkan pesan setelah beberapa detik (contoh: 4 detik)
+                setTimeout(function() {
+                    flashMessages.style.transition = 'opacity 0.5s ease';
+                    flashMessages.style.opacity = '0'; // Mengurangi opacity agar tampak hilang
+                    setTimeout(function() {
+                        flashMessages.style.display = 'none'; // Menyembunyikan elemen setelah fade-out
+                    }, 500); // Waktu yang diperlukan untuk fade-out
+                }, 4000); // Setelah 4 detik pesan akan menghilang
+            }
+        });
+    </script>
+  <footer>
+    <p>📸 @waluya_aquarium | 📞 081808880816 (Tria)</p>
+    <p>© 2025 – 2029 Waluya Aquarium All Right Reserved</p>
+  </footer>
+
+</body>
+</html>

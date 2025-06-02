@@ -1,0 +1,544 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    color: black;
+}
+
+.body{
+    padding: 40px;
+    background: linear-gradient(to bottom, #ffffff 70%, #6ab4ff 100%);
+}
+
+
+header {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    height: 60px;
+}
+
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    width: 100%;
+}
+
+/* Navbar Logo and Links */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-navbar {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.nama-brand {
+    font-weight: 700;
+    color: #22559C;
+}
+
+/* Navbar Links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin-left: auto;
+    margin-right: 15px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #22559C;
+    font-weight: 700;
+}
+
+.navbar .nav-links li {
+    position: relative;
+}
+
+/* Menyembunyikan dropdown menu secara default */
+.navbar .nav-links .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    padding: 10px 0;
+    border-radius: 5px;
+    min-width: 160px; /* Menetapkan lebar minimum untuk dropdown */
+    width: auto;
+    transition: opacity 0.3s ease-in-out;
+    list-style-type: none; /* Menghapus bullet */
+    padding-left: 0; /* Menghapus indentasi */
+}
+
+/* Menampilkan dropdown menu saat hover pada 'Produk Kami' */
+.navbar .nav-links li:hover .dropdown-menu {
+    display: block;
+}
+
+/* Style untuk link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a {
+    display: block;
+    padding: 5px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+/* Efek hover pada link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a:hover {
+    background-color: #f8f8f8;
+}
+
+/* Navbar Button Styles */
+.buttons button {
+    margin-left: 15px;
+    padding: 6px 15px;
+    border-radius: 5px;
+    font-weight: 700;
+    color: #22559C;
+    border: 1px solid #22559C;
+    cursor: pointer;
+    background-color: white;
+}
+
+.login-button {
+    transition: opacity 0.5s;
+}
+
+.login-button:hover {
+    opacity: 0.5;
+}
+
+.login-button:active {
+    opacity: 0.3;
+}
+
+.buttons .register-button {
+    color: white;
+    background-color: #22559C;
+    transition: opacity 1s;
+}
+
+.register-button:hover {
+    opacity: 0.7;
+}
+
+.register-button:active {
+    opacity: 0.5;
+}
+
+.section-title{
+    text-align: center;
+    color: #22559C;
+    margin-top: 20px;
+    font-size: 47px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 2px solid #15388f;
+    border-radius: 30px;
+    padding: 10px 20px;
+    width: 800px;
+    margin: 0 auto 40px; /* Tengah dan beri jarak bawah */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+.search-bar .search-icon{
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+.search-bar input{
+    border: none;
+    outline: none;
+    flex: 1;
+    width: 730px;
+}
+.products-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  max-width: 1000px;
+}
+
+.filters-container{
+    margin-bottom: 60px;
+    margin-top: 60px;
+    align-items: center;
+}
+/* Filter Button Styling */
+.filter-container {
+    text-align: left;
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+.filter-button {
+    background-color: #C3DCFF;
+    color: transparent;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-button:hover {
+    background-color: #A6C0FF;
+}
+
+.filter-icon {
+    width: 30px;
+    height: 30px;
+}
+
+/* Filter Section Styling */
+.filter-section {
+    display: none;
+    background-color: #ffffff;  /* Sama dengan warna card */
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section.active {
+    display: block;
+}
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group label {
+    font-weight: bold;
+    margin-right: 10px;
+    display: inline-block;
+    width: 150px; /* Lebar label yang konsisten */
+}
+
+.filter-group select {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 200px; /* Menentukan lebar dropdown */
+}
+
+.filter-submit {
+    background-color: #22559C;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.filter-submit:hover {
+    background-color: #15388f;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+    margin-bottom: 400px;
+}
+
+.card {
+    background-color: #C3DCFF;
+    border-radius: 12px;
+    width: 100%;
+    padding: 15px;
+    max-width: 220px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-image{
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.card-image img {
+    width: 100%;
+    max-width: 190px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 0 5px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-content h3{
+    color:#22559C;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-content h4{
+    color:#22559C;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 15px;
+    font-weight: 600;
+}
+.card-content p{
+    color:#22559C;
+    font-size: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4; /* Batasi ke 3 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+
+.footer-gradient {
+    background: linear-gradient(to top, #6ab4ff, #ffffff ); /* Membalikkan arah gradasi */
+    text-align: center;
+    padding: 150px 0; /* Menambah padding atas dan bawah agar teks lebih turun */
+    color: #000;
+    font-size: 14px;
+}
+
+.product-preview {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.product-preview .preview {
+  background: #C3EDFF;
+  width: 700px;
+  max-width: 95%;
+  border-radius: 12px;
+  display: none;
+  flex-direction: row;
+  gap: 30px;
+  padding: 20px;
+  position: relative;
+
+}
+
+.product-preview .preview.active {
+  display: flex;
+}
+
+.product-preview .fa-times {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+.preview-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.preview-left img {
+  width: 375px;
+  height: 275px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.preview-left h3 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: #15388f;
+  margin-bottom: 20px;
+}
+
+.preview-bottom {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.stock {
+  font-size: 18px;
+  text-align: center;
+  color:#000000;
+  margin-bottom: 0px;
+}
+
+.wishlist-buttons {
+  background: #15388f;
+  color: white;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  margin-right: 20px;
+  transition: 0.4s;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.wishlist-buttons:hover{
+    color:#15388f;
+    background: white;
+}
+
+.wishlist-buttons:active{
+    opacity: 0.3;
+}
+
+.preview-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-right p {
+  font-size: 12px;
+  color: #333;
+  text-align: justify;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.price .angka{
+  margin-top: 10px;
+  margin-left: 70px;
+  font-size: 14px;
+  color: #2c2c2c;
+  font-weight: 500;
+}
+
+.price .nominal {
+    font-size: 24px;
+    margin-top: 5px;
+    color: #2c2c2c;
+    font-weight: 800;
+}
+
+.messages {
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+}
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+.wishlist-buttons {
+    background-color: #22559C;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.wishlist-buttons:hover {
+    background-color: #1a4480;
+}
+.wishlist-buttons.in-wishlist {
+    background-color: #28a745;
+}
+.wishlist-buttons.in-wishlist:hover {
+    background-color: #218838;
+}
+.filter-section {
+    display: none;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.filter-section.active {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

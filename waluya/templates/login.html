@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+<div class="gambar">
+    <div class="left-section">
+        <div class="gambar-container">
+            <img src="{% static 'img/W.png' %}" alt="Logo W" class="logo-w">
+        </div>
+        <div class="welcome-text">
+            <h2>Welcome Back!</h2>
+            <p>Please fill in your account to reconnect with us</p>
+        </div>
+    </div>
+
+    <div class="formbox">
+        <form method="post">
+            {% csrf_token %}
+            <h1>Sign in to Waluya Aquarium</h1>
+
+            
+
+            <p>use your E-mail account</p>
+
+            <div class="input-box">
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <ul>
+                        {% for error in form.email.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="input-box">
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <ul>
+                        {% for error in form.password.errors %}
+                            <li class="error-message">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="forgotpass-link"><a href="{% url 'password_reset' %}">Forgot your password?</a></div>
+
+            <button type="submit" class="signin-button">Sign in</button>
+
+            <p class="signup">Don't have an account? <a href="{% url 'sign_up' %}" class="signup-link">Sign up here</a></p>
+        </form>
+    </div>
+</div>
+</body>
+</html>

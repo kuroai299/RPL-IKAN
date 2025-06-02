@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        function updateFormFields() {
+            const selectedCategory = document.getElementById('category').value;
+            const sections = ['fish', 'fishmedicine', 'aquariumstuff', 'fishfood'];
+    
+            sections.forEach(cat => {
+                const section = document.getElementById(`${cat}-fields`);
+                section.style.display = (cat === selectedCategory.toLowerCase()) ? 'block' : 'none';
+            });
+        }
+        document.addEventListener("DOMContentLoaded", updateFormFields);
+    </script>
+    
+    <title>Admin Product List</title>
+
+</head>
+<body>
+    <h1>{{ category }} Products - Admin</h1>
+
+    <!-- Navigasi kategori -->
+    <h3>Filter by Category</h3>
+    <ul>
+        <li><a href="?category=Fish">Ikan</a></li>
+        <li><a href="?category=FishMedicine">Obat Ikan</a></li>
+        <li><a href="?category=AquariumStuff">Barang Aquarium</a></li>
+        <li><a href="?category=FishFood">Makanan Ikan</a></li>
+    </ul>
+
+    <h3>Navigation</h3>
+    <ul>
+        <!-- Form untuk menambah produk baru berdasarkan kategori -->
+        <form action="{% url 'add_product' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="Fish">Ikan</option>
+                <option value="FishMedicine">Obat Ikan</option>
+                <option value="AquariumStuff">Barang Aquarium</option>
+                <option value="FishFood">Makanan Ikan</option>
+            </select><br><br>
+
+            <!-- Form fields yang berbeda sesuai kategori -->
+            <div id="productFormFields">
+                <!-- Template untuk kategori Fish -->
+                <div class="fish-category-fields">
+                    <label for="name">Fish Name:</label>
+                    <input type="text" name="name" required><br><br>
+
+                    <label for="size">Size:</label>
+                    <select name="size">
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select><br><br>
+
+                    <label for="color">Color:</label>
+                    <select name="color">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                    </select><br><br>
+
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" required><br><br>
+
+                    <label for="stock">Stock:</label>
+                    <input type="number" name="stock" required><br><br>
+
+                    <label for="image">Image:</label>
+                    <input type="file" name="image" required><br><br>
+                </div>
+
+                <!-- Template untuk kategori FishMedicine -->
+                <div class="fishmedicine-category-fields">
+                    <label for="name">Medicine Name:</label>
+                    <input type="text" name="name" required><br><br>
+
+                    <label for="medicine_type">Medicine Type:</label>
+                    <select name="medicine_type">
+                        <option value="herbal">Herbal</option>
+                        <option value="chemical">Chemical</option>
+                    </select><br><br>
+
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" required><br><br>
+
+                    <label for="stock">Stock:</label>
+                    <input type="number" name="stock" required><br><br>
+
+                    <label for="image">Image:</label>
+                    <input type="file" name="image" required><br><br>
+                </div>
+
+                <!-- Template untuk kategori AquariumStuff -->
+                <div class="aquariumstuff-category-fields">
+                    <label for="name">Stuff Name:</label>
+                    <input type="text" name="name" required><br><br>
+
+                    <label for="stuff_type">Stuff Type:</label>
+                    <select name="stuff_type">
+                        <option value="filter">Filter</option>
+                        <option value="waterpump">Water Pump</option>
+                        <option value="aeration">Aeration</option>
+                        <option value="accessory">Accessory</option>
+                    </select><br><br>
+
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" required><br><br>
+
+                    <label for="stock">Stock:</label>
+                    <input type="number" name="stock" required><br><br>
+
+                    <label for="image">Image:</label>
+                    <input type="file" name="image" required><br><br>
+                </div>
+
+                <!-- Template untuk kategori FishFood -->
+                <div class="fishfood-category-fields">
+                    <label for="name">Food Name:</label>
+                    <input type="text" name="name" required><br><br>
+
+                    <label for="food_type">Food Type:</label>
+                    <select name="food_type">
+                        <option value="organic">Organic</option>
+                        <option value="processed">Processed</option>
+                    </select><br><br>
+
+                    <label for="price">Price:</label>
+                    <input type="number" name="price" required><br><br>
+
+                    <label for="stock">Stock:</label>
+                    <input type="number" name="stock" required><br><br>
+
+                    <label for="image">Image:</label>
+                    <input type="file" name="image" required><br><br>
+                </div>
+            </div>
+
+            <button type="submit">Save Product</button>
+        </form>
+    </ul>
+
+    <h3>Products</h3>
+
+    {% if products %}
+        <ul>
+            {% for product in products %}
+                <li>
+                    {{ product.name }} - {{ product.price }}
+                    <a href="{% url 'edit_product' product.id %}">Edit</a> |
+                    <a href="{% url 'delete_product' product.id %}" onclick="return confirm('Yakin ingin menghapus produk ini?')">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No products available in this category.</p>
+    {% endif %}
+
+    <a href="{% url 'logout' %}">Logout</a>  <!-- Add logout option -->
+</body>
+</html>
