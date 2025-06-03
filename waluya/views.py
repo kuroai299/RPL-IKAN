@@ -139,11 +139,9 @@ def landing_page(request):
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     
-    # Check if this is an AJAX request
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
     
     try:
-        # Try to create a new wishlist item
         wishlist_item, created = Wishlist.objects.get_or_create(user=request.user, product=product)
         
         if created:
