@@ -1,0 +1,430 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* Reset basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    color: black;
+}
+
+.body{
+    padding: 40px;
+    background: linear-gradient(to bottom, #ffffff 70%, #6ab4ff 100%);
+}
+
+/* Navbar Styles */
+header {
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    height: 60px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;                      /* Jarak antar item navbar */
+    margin: 0;
+}
+
+/* Style untuk navbar dan dropdown */
+.navbar .nav-links li {
+    position: relative;
+}
+
+/* Menyembunyikan dropdown menu secara default */
+.navbar .nav-links .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    padding: 10px 0;
+    border-radius: 5px;
+}
+
+/* Menampilkan dropdown menu saat hover pada 'Produk Kami' */
+.navbar .nav-links li:hover .dropdown-menu {
+    display: block;
+}
+
+/* Style untuk link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a {
+    display: block;
+    padding: 8px 16px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+/* Efek hover pada link di dalam dropdown */
+.navbar .nav-links .dropdown-menu li a:hover {
+    background-color: #f8f8f8;
+}
+
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    width: 100%;
+}
+
+/* Navbar Logo and Links */
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-navbar {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.nama-brand {
+    font-weight: 700;
+    color: #22559C;
+}
+
+/* Navbar Links */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+    margin-left: auto;
+    margin-right: 15px;
+    align-items: center; 
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #22559C;
+    font-weight: 700;
+    line-height: 20px;
+}
+
+/* Navbar Button Styles */
+/* Navbar Button Styles */
+.buttons {
+    display: flex;
+    gap: 10px; /* Ensure there's space between the buttons */
+    align-items: center;
+    margin-left: 8px; /* Adjust margin as needed */
+}
+.buttons button {
+    margin-left: 9px;
+    padding: 6px 15px; /* Adjust padding if needed */
+    border-radius: 5px;
+    font-weight: 700;
+    color: #22559C;
+    border: 1px solid #22559C;
+    cursor: pointer;
+    background-color: white;
+    font-size: 13.4px; /* Set the font size for consistency */
+    height: 34px; /* Set a consistent height */
+}
+
+.login-button {
+    transition: opacity 0.5s;
+}
+
+.login-button:hover {
+    opacity: 0.5;
+}
+
+.login-button:active {
+    opacity: 0.5;
+}
+
+.buttons .register-button {
+    color: white;
+    background-color: #22559C;
+    transition: opacity 1s;
+    font-size: 13.4px; /* Set the font size for consistency */
+    height: 34px; /* Set a consistent height */
+}
+
+.register-button:hover {
+    opacity: 0.7;
+}
+
+.register-button:active {
+    opacity: 0.5;
+}
+
+
+/* Hero Section */
+.hero {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    color: white;
+    background: linear-gradient(rgba(29, 28, 135, 0.312), rgba(0, 0, 0, 0.5)), url('/static/img/DSCF6764.JPG') center/cover no-repeat;
+    position: relative;
+    height: 45vw;
+    padding-left: 10px; /* Memindahkan teks ke kiri */
+    padding-right: 10px;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    width: 100%;
+    height: 30%;  /* Mengatur seberapa jauh fade-out akan terlihat */
+    background: linear-gradient(to top, rgb(255, 255, 255), rgba(255, 255, 255, 0)); /* Gelap ke transparan */
+    z-index: 1; /* Menjaga supaya berada di atas gambar background */
+}
+.hero-overlay {
+    background-color: transparent;;
+    padding: 1vw;
+    display: flex;
+    gap: 1vw;
+    align-items: center;
+    max-width: 100%x;
+    position: relative;
+    z-index: 2; /* Make sure text appears above the overlay */
+    margin-left: 10vw;
+    width: 100%;
+    
+}
+
+.hero-text h1 {
+    font-size: 4vw;
+    font-weight: 600;
+    margin-bottom: 2vw;
+    color: #ffffff;
+    margin-right: 20vw;
+    width: 100%;
+}
+
+.hero-text button {
+    background-color: white;
+    color: #15388F;
+    border: none;
+    padding: 1.2vw 2.4vw;
+    font-weight: bold;
+    border-radius: 3vw;
+    cursor: pointer;
+    font-size: 1.3vw;
+}
+
+.hero-overlay img {
+    width: 30vw; /* Sesuaikan ukuran logo yang kamu inginkan */
+    height: auto; /* Membiarkan proporsi tetap */
+}
+
+
+button:hover {
+    background-color: #d3d3d3;
+}
+/* Section Layout */
+.section {
+    padding: 80px 50px;
+    text-align: center;
+}
+
+/* Carousel Section */
+/* Carousel Section */
+/* Carousel Section */
+.carousel-inner {
+    display: flex;  /* Untuk mengatur carousel menjadi flexbox */
+    overflow: hidden;
+}
+
+.carousel-item {
+    flex: 0 0 100%;  /* Setiap item mengambil 100% dari ruang yang tersedia */
+    transition: transform 0.8s ease, opacity 0.8s ease; /* Transition yang halus saat pergantian gambar */
+    position: relative;
+    border-radius: 15px; /* Add border radius to each carousel item */
+    overflow: hidden; 
+}
+
+.carousel-item img {
+    width: 80%;
+    height: auto;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+    overflow: hidden;
+    border-radius: 20px;
+    object-fit: contain;
+    box-shadow: #1e1e1ed3 0px 50px 100px 0px; /* Add shadow to images */
+    
+}
+
+.carousel-item.active img {
+    transform: scale(0.7);
+    opacity: 1; /* Slightly zoom the active image for emphasis */
+    
+}
+.carousel-item:not(.active) img {
+    opacity: 0.5; /* Make inactive images more transparent */
+    filter: brightness(0.7); /* Darken sneak peek images */
+    transform: scale(0.6);
+}
+/* Sneak Peek (Navigation arrows) */
+
+.carousel-control-prev, .carousel-control-next {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-45%);
+    width: 3%; /* Smaller width for the arrows */
+    z-index: 10;
+    background: none; /* No background */
+    color: #ffffff; /* White color for arrows */
+    font-size: 2rem; /* Size of the arrow */
+    border: none; /* Remove border */
+}
+
+
+/* Custom Overlay Text */
+
+
+.products {
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.product {
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.product img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.7);
+    transition: transform 0.3s ease;
+}
+
+.product:hover img {
+    transform: scale(1.05);
+}
+
+.product label {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    justify-content: left;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    display: block;
+}
+
+/* Contact Section */
+.contact-section {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 60px 50px;
+    background: #f9f9f9;
+    flex-wrap: wrap;
+}
+
+.map {
+  max-width: 500px;
+  /* Tambahkan ini untuk align tinggi map dan kontak */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.map img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+}
+
+.contact {
+    background: #15388F;
+    color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    flex: 1;
+    margin-top: 43px; 
+}
+
+.contact h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.contact form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contact input, .contact textarea {
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #589EFF;
+    font-size: 16px;
+    background: #fff;
+}
+
+.contact button {
+    background: #589EFF;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+footer {
+    background: linear-gradient(to top, #589EFF, #e0ecff);
+    color: #1E1E1E;
+    text-align: center;
+    padding: 30px;
+    font-size: 14px;
+}
+
+.form-control {
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #589EFF;
+    font-size: 16px;
+    background: #fff;
+}
+
+.flash-messages {
+    background-color: #d4edda;  /* Hijau muda */
+    color: #155724;             /* Hijau tua */
+    border: 1px solid #c3e6cb;
+    padding: 10px 15px;
+    border-radius: 8px;
+    list-style: none;
+    margin-bottom: 20px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.flash-messages li {
+  margin-left: 0; /* hilangkan indentasi */
+}

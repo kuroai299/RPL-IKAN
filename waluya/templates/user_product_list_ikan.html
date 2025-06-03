@@ -1,0 +1,174 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Katalog Ikan</title>
+    <link rel="stylesheet" href="{% static 'css/user_product_list.css' %}" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/popup_catalog.js' %}" defer></script>
+    <!-- Font Awesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="{% static 'img/W biru.png' %}" alt="Waluya logo" class="logo-navbar" />
+                <span class="nama-brand">Waluya Aquarium</span>
+            </div>
+            <ul class="nav-links">
+               <li><a href="{% url 'landing_page' %}">Tentang Kami</a></li>
+                <li><a href="#">Produk Kami</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user_product_list_ikan' %}?category=Fish">Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_makanan_ikan' %}?category=FishFood">Makanan Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_obat_ikan' %}?category=FishMedicine">Obat Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_barang_akuarium' %}?category=AquariumStuff">Peralatan Aquarium</a></li>
+                    </ul>
+                </li>
+                <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+            </ul>
+            <div class="buttons">
+                {% if user.is_authenticated %}
+                   
+                    <button class="login-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+                {% else %}
+                    <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                    <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <!-- Area untuk pesan -->
+    {% if messages %}
+    <div class="messages container">
+        {% for message in messages %}
+            <div class="{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
+
+    <h1 class="section-title">IKAN</h1>
+    <div class="search-bar">
+        <img src="{% static 'img/bx-search-alt-2.svg' %}" alt="Search Icon" class="search-icon" />
+        <form method="get" action="{% url 'user_product_list_makanan_ikan' %}">
+            <input type="text" name="search" placeholder="Search here" value="{{ request.GET.search }}" />
+            <button type="submit" style="display: none;"></button>
+        </form>
+    </div>
+
+    <div class="products-wrapper">
+        <!-- Filter Section -->
+        <div class="filters-container">
+            <div class="filter-container">
+                <button id="filterButton" class="filter-button">
+                    <img src="{% static 'img/filter-left.png' %}" alt="Filter Icon" class="filter-icon">
+                </button>
+            </div>
+            <div id="filterSection" class="filter-section">
+                <form method="get" action="{% url 'user_product_list_makanan_ikan' %}">
+                    <div class="filter-group">
+                        <label for="orderBy">Urutkan sesuai:</label>
+                        <select name="order_by" id="orderBy">
+                            <option value="price_asc" {% if request.GET.order_by == 'price_asc' %}selected{% endif %}>Harga: Murah ke Mahal</option>
+                            <option value="price_desc" {% if request.GET.order_by == 'price_desc' %}selected{% endif %}>Harga: Mahal ke Murah</option>
+                            <option value="name_asc" {% if request.GET.order_by == 'name_asc' %}selected{% endif %}>Nama: A-Z</option>
+                            <option value="name_desc" {% if request.GET.order_by == 'name_desc' %}selected{% endif %}>Nama: Z-A</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="foodTypeFilter">Filter Jenis Makanan:</label>
+                        <select name="food_type" id="foodTypeFilter">
+                            <option value="">-- Semua Jenis --</option>
+                            <option value="organik" {% if request.GET.food_type == 'organik' %}selected{% endif %}>Organik</option>
+                            <option value="olahan" {% if request.GET.food_type == 'olahan' %}selected{% endif %}>Olahan</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="filter-submit">Terapkan Filter</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card-container" id="cardContainer">
+            {% for product in products %}
+            <div class="card" data-target="p-{{ product.id }}">
+                <div class="card-image">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+                    {% else %}
+                        <img src="{% static 'img/default-product.png' %}" alt="No Image" />
+                    {% endif %}
+                </div>
+                <div class="card-content">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description|truncatewords:20 }}</p>
+                    <h4>Harga: Rp{{ product.price }}</h4>
+                    <h4>Stok: {{ product.stock }}</h4>
+                </div>
+            </div>
+            {% empty %}
+            <p>No products found</p>
+            {% endfor %}
+        </div>
+
+        <!-- Product Preview Section -->
+        <div class="product-preview">
+            {% for product in products %}
+            <div class="preview" data-target="p-{{ product.id }}">
+                <i class="fas fa-times"></i>
+                <div class="preview-left">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <div class="preview-bottom">
+                        <div class="stock">Available Product: <strong>{{ product.stock }}</strong></div>
+                    </div>
+                </div>
+                <div class="preview-right">
+                    <p>{{ product.description }}</p>
+                    <div class="price">
+                        <p class="angka">Price</p>
+                        <p class="nominal">Rp{{ product.price }}</p>
+                    </div>
+                    <!-- Tombol wishlist dengan ID yang sesuai -->
+                    {% if user.is_authenticated %}
+                        {% if product.is_in_wishlist %}
+                            <button id="remove-from-wishlist" class="wishlist-buttons in-wishlist" 
+                                    data-product-id="{{ product.id }}" 
+                                    data-wishlist-id="{{ product.wishlist_id }}">
+                                <i class="fas fa-heart"></i> Hapus dari Wishlist
+                            </button>
+                        {% else %}
+                            <button id="add-to-wishlist" class="wishlist-buttons" 
+                                    data-product-id="{{ product.id }}">
+                                <i class="far fa-heart"></i> Tambah ke Wishlist
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <button class="wishlist-buttons" onclick="window.location.href='{% url 'user_login' %}'">
+                            <i class="far fa-heart"></i> Login untuk Wishlist
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Script wishlist.js yang sudah ada -->
+    <script src="{% static 'js/wishlist.js' %}"></script>
+</body>
+<footer class="footer-gradient">
+    <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>
+</footer>
+</html>

@@ -1,0 +1,298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+   <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <div class="nav-icon active">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="7" height="7" rx="1" fill="white" />
+                <rect x="3" y="14" width="7" height="7" rx="1" fill="white" />
+                <rect x="14" y="3" width="7" height="7" rx="1" fill="white" />
+                <rect x="14" y="14" width="7" height="7" rx="1" fill="white" />
+            </svg>
+        </div>
+        <a href="{% url 'admin_message' %}" class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+        <a href="/logout/" class="nav-icon logout-icon" title="Logout">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 17L21 12L16 7" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 12H9" stroke="#3D3D3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1 class="title">Admin Dashboard</h1>
+            <h2 class="subtitle">Manage Products</h2>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <h3 class="categories-title">Categories</h3>
+            <div class="category-buttons">
+                <a href="{% url 'admin_dashboard' %}?category=Fish" class="category-btn {% if category == 'Fish' %}active{% endif %}">Ikan</a>
+                <a href="{% url 'admin_dashboard' %}?category=FishMedicine" class="category-btn {% if category == 'FishMedicine' %}active{% endif %}">Obat Ikan</a>
+                <a href="{% url 'admin_dashboard' %}?category=FishFood" class="category-btn {% if category == 'FishFood' %}active{% endif %}">Makanan Ikan</a>
+                <a href="{% url 'admin_dashboard' %}?category=AquariumStuff" class="category-btn {% if category == 'AquariumStuff' %}active{% endif %}">Peralatan Aquarium</a>
+            </div>
+        </div>
+
+        <!-- Search and Add Product -->
+        <div class="action-bar">
+            <div class="search-container">
+                <button id="searchBtn">
+                    
+                </button>
+                <input type="text" id="searchInput" placeholder="Search products...">
+            </div>
+            
+            <!-- Add Product Button -->
+            <button type="button" class="add-product-btn" id="openPopupBtn">
+                <span class="plus-icon">+</span>
+                <span>Add Product</span>
+            </button>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Product Card -->
+        <div class="products-list" id="productsList">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-card-content">
+                    <div class="product-image-container">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                        {% else %}
+                        <div class="no-image">No Image</div>
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">{{ product.name }}</h3>
+                        <p class="product-description">{{ product.description|truncatewords:20 }}</p>
+                        <div class="product-meta">
+                            <span class="product-price">Rp {{ product.price }}</span>
+                            <span class="product-stock">Stock: {{ product.stock }}</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="edit-btn" data-product-id="{{ product.id }}" data-category="{{ category }}"
+                                data-name="{{ product.name }}" 
+                                data-description="{{ product.description }}" 
+                                data-price="{{ product.price }}"
+                                data-stock="{{ product.stock }}">Edit</button>
+                            <button class="delete-btn" data-product-id="{{ product.id }}" data-name="{{ product.name }}">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <p>No products available.</p>
+                <p class="empty-hint">Click "Add Product" to get started.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Product Popup Form -->
+     <!-- Product Popup Form -->
+<div id="productPopup" class="popup-overlay" style="display:none;">
+    <div class="popup-content">
+        <button id="closePopupBtn" class="popup-close-btn">&times;</button>
+        
+        <div class="popup-form">
+            <form id="productForm" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="productId" name="product_id" value="">
+                
+                <div class="form-left">
+                    <div class="image-upload-container">
+                        <div id="imagePreview" class="image-preview">
+                            <p>no image</p>
+                        </div>
+                        <label for="productImage" class="edit-image-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </label>
+                        <input type="file" id="productImage" name="image" accept="image/*" hidden>
+                    </div>
+                    
+                    <!-- Name field below image -->
+                    <div class="form-group name-group">
+                        <label for="productName">Name</label>
+                        <input type="text" id="productName" name="name" placeholder="Enter product name" required>
+                        <div class="edit-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-right">
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" name="description" placeholder="Enter product description" maxlength="500" required></textarea>
+                        <div class="char-count">Max. 500 characters</div>
+                        <div class="edit-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productPrice">Price</label>
+                        <input type="text" id="productPrice" name="price" placeholder="Input price here" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory" name="category" required>
+                            <option value="" disabled selected>Select Category</option>
+                            <option value="Fish">Ikan</option>
+                            <option value="FishMedicine">Obat Ikan</option>
+                            <option value="FishFood">Makanan Ikan</option>
+                            <option value="AquariumStuff">Peralatan Aquarium</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Category-specific fields -->
+                    <div id="categorySpecificFields">
+                        <!-- Fish specific fields -->
+                        <div id="fishFields" class="category-fields">
+                            <div class="form-group">
+                                <label for="fishSize">Size</label>
+                                <select id="fishSize" name="size">
+                                    <option value="kecil">Kecil</option>
+                                    <option value="sedang">Sedang</option>
+                                    <option value="besar">Besar</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fishColor">Color</label>
+                                <select id="fishColor" name="color">
+                                    <option value="gelap">Gelap</option>
+                                    <option value="terang">Terang</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Medicine specific fields -->
+                        <div id="medicineFields" class="category-fields">
+                            <div class="form-group">
+                                <label for="medicineType">Medicine Type</label>
+                                <select id="medicineType" name="medicine_type">
+                                    <option value="herbal">Herbal</option>
+                                    <option value="kimiawi">Kimiawi</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Aquarium stuff specific fields -->
+                        <div id="stuffFields" class="category-fields">
+                            <div class="form-group">
+                                <label for="stuffType">Stuff Type</label>
+                                <select id="stuffType" name="stuff_type">
+                                    <option value="filter">Filter</option>
+                                    <option value="waterpump">Waterpump</option>
+                                    <option value="aerasi">Aerasi</option>
+                                    <option value="aksesoris">Aksesoris</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Fish food specific fields -->
+                        <div id="foodFields" class="category-fields">
+                            <div class="form-group">
+                                <label for="foodType">Food Type</label>
+                                <select id="foodType" name="food_type">
+                                    <option value="organik">Organik</option>
+                                    <option value="olahan">Olahan</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                
+                <div class="form-actions">
+                    <div class="quantity-control">
+                        <button type="button" id="decreaseBtn" class="quantity-btn">−</button>
+                        <span id="quantityValue">5</span>
+                        <input type="hidden" id="productStock" name="stock" value="5">
+                        <button type="button" id="increaseBtn" class="quantity-btn">+</button>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="submit" id="addProductBtn" class="add-btn">Tambah Produk</button>
+                        <button type="button" id="deleteBtn" class="delete-btn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 6H5H21" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="#1E40AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="confirm-dialog" style="display:none;">
+        <div class="confirm-content">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete <strong id="deleteProductName"></strong>? This action cannot be undone.</p>
+            <div class="confirm-actions">
+                <button id="cancelDeleteBtn" class="cancel-btn">Cancel</button>
+                <button id="confirmDeleteBtn" class="confirm-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/admin_dashboard.js' %}"></script>
+</body>
+</html>

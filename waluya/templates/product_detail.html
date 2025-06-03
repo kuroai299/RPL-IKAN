@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }} - Detail</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        img { max-width: 200px; height: auto; display: block; margin-bottom: 10px; }
+        .back-link { margin-top: 20px; display: inline-block; }
+        
+        /* Tambahan CSS untuk wishlist */
+        .wishlist-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        .wishlist-button:hover {
+            background-color: #e9ecef;
+        }
+        .wishlist-button.in-wishlist {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .wishlist-button.in-wishlist:hover {
+            background-color: #c3e6cb;
+        }
+        .messages {
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+    <!-- Tambahkan Font Awesome untuk ikon hati -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <!-- Area untuk menampilkan pesan -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h1>{{ product.name }}</h1>
+
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% endif %}
+
+    <p><strong>Deskripsi:</strong> {{ product.description }}</p>
+    <p><strong>Harga:</strong> Rp {{ product.price }}</p>
+    <p><strong>Stok:</strong> {{ product.stock }}</p>
+
+    {% if product_type == "Fish" %}
+        <p><strong>Ukuran:</strong> {{ product.size }}</p>
+        <p><strong>Warna:</strong> {{ product.color }}</p>
+    {% elif product_type == "FishMedicine" %}
+        <p><strong>Tipe Obat:</strong> {{ product.medicine_type }}</p>
+    {% elif product_type == "AquariumStuff" %}
+        <p><strong>Tipe Barang:</strong> {{ product.stuff_type }}</p>
+    {% elif product_type == "FishFood" %}
+        <p><strong>Tipe Makanan:</strong> {{ product.food_type }}</p>
+    {% endif %}
+
+    <!-- Tambahkan tombol wishlist -->
+    {% csrf_token %}
+    <div class="product-actions">
+        {% if is_in_wishlist %}
+            <button id="remove-from-wishlist" class="wishlist-button in-wishlist" data-product-id="{{ product.id }}" data-wishlist-id="{{ wishlist_id }}">
+                <i class="fas fa-heart"></i> Hapus dari Wishlist
+            </button>
+        {% else %}
+            <button id="add-to-wishlist" class="wishlist-button" data-product-id="{{ product.id }}">
+                <i class="far fa-heart"></i> Tambah ke Wishlist
+            </button>
+        {% endif %}
+    </div>
+
+    <div class="back-link">
+        <a href="{% url 'user_product_list_ikan' %}?category={{ product_type }}">← Kembali ke daftar</a>
+    </div>
+
+    <!-- Tambahkan script untuk wishlist -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add to wishlist functionality
+            const addToWishlistBtn = document.getElementById('add-to-wishlist');
+            if (addToWishlistBtn) {
+                addToWishlistBtn.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                    
+                    fetch(`/add_to_wishlist/${productId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update button to show it's in wishlist
+                            this.innerHTML = '<i class="fas fa-heart"></i> Hapus dari Wishlist';
+                            this.classList.add('in-wishlist');
+                            this.dataset.wishlistId = data.wishlist_id;
+                            
+                            // Change to remove from wishlist functionality
+                            this.id = 'remove-from-wishlist';
+                            
+                            // Show success message
+                            showMessage('success', data.message);
+                            
+                            // Add event listener to the new button
+                            addRemoveEventListener(this);
+                        } else {
+                            showMessage('error', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showMessage('error', 'Terjadi kesalahan saat menambahkan ke wishlist');
+                    });
+                });
+            }
+            
+            // Remove from wishlist functionality
+            const removeFromWishlistBtn = document.getElementById('remove-from-wishlist');
+            if (removeFromWishlistBtn) {
+                addRemoveEventListener(removeFromWishlistBtn);
+            }
+            
+            function addRemoveEventListener(button) {
+                button.addEventListener('click', function() {
+                    const wishlistId = this.dataset.wishlistId;
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                    
+                    fetch(`/remove_from_wishlist/${wishlistId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update button to show it's not in wishlist
+                            this.innerHTML = '<i class="far fa-heart"></i> Tambah ke Wishlist';
+                            this.classList.remove('in-wishlist');
+                            this.dataset.wishlistId = '';
+                            
+                            // Change to add to wishlist functionality
+                            this.id = 'add-to-wishlist';
+                            
+                            // Show success message
+                            showMessage('success', data.message);
+                        } else {
+                            showMessage('error', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showMessage('error', 'Terjadi kesalahan saat menghapus dari wishlist');
+                    });
+                });
+            }
+            
+            // Function to show messages
+            function showMessage(type, message) {
+                let messagesContainer = document.querySelector('.messages');
+                
+                if (!messagesContainer) {
+                    messagesContainer = document.createElement('div');
+                    messagesContainer.className = 'messages';
+                    
+                    const h1 = document.querySelector('h1');
+                    h1.parentNode.insertBefore(messagesContainer, h1);
+                }
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = type;
+                messageElement.textContent = message;
+                
+                messagesContainer.appendChild(messageElement);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    messageElement.remove();
+                    
+                    // Remove container if empty
+                    if (messagesContainer.children.length === 0) {
+                        messagesContainer.remove();
+                    }
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

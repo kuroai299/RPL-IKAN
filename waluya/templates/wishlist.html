@@ -1,0 +1,315 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wishlist - Waluya Aquarium</title>
+    <link rel="stylesheet" href="{% static 'css/user_product_list.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/wishlist.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="wishlist-page">
+    <header>
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="{% static 'img/W biru.png' %}" alt="Waluya logo" class="logo-navbar" />
+                <span class="nama-brand">Waluya Aquarium</span>
+            </div>
+            <ul class="nav-links">
+               <li><a href="{% url 'landing_page' %}">Tentang Kami</a></li>
+                <li><a href="#">Produk Kami</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'user_product_list_ikan' %}">Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_makanan_ikan' %}">Makanan Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_obat_ikan' %}">Obat Ikan</a></li>
+                        <li><a href="{% url 'user_product_list_barang_akuarium' %}">Peralatan Aquarium</a></li>
+                    </ul>
+                </li>
+                <li><a href="{% url 'wishlist' %}" class="active">Wishlist</a></li>
+            </ul>
+            <div class="buttons">
+                {% if user.is_authenticated %}
+                   
+                    <button class="login-button" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+                {% else %}
+                    <button class="login-button" onclick="window.location.href='{% url 'user_login' %}'">Login</button>
+                    <button class="register-button" onclick="window.location.href='{% url 'sign_up' %}'">Register</button>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <!-- Area untuk pesan -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="{{ message.tags }}">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- CSRF Token -->
+    {% csrf_token %}
+
+    <div class="wishlist-container">
+        <div class="wishlist-header">
+            <h1 class="section-title">Wishlist {% if wishlist_items %}<span class="wishlist-count">({{ wishlist_items|length }})</span>{% endif %}</h1>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-container">
+            <button class="filter-button" onclick="toggleFilter()">
+                <i class="fas fa-filter"></i>
+                <span class="filter-text">Filter</span>
+            </button>
+            
+            {% if request.GET.category or request.GET.price_range or request.GET.sort_by %}
+            <div class="active-filters">
+                {% if request.GET.category %}
+                <span class="filter-tag">
+                    Kategori: 
+                    {% if request.GET.category == 'Fish' %}Ikan
+                    {% elif request.GET.category == 'FishFood' %}Makanan Ikan
+                    {% elif request.GET.category == 'FishMedicine' %}Obat Ikan
+                    {% elif request.GET.category == 'AquariumStuff' %}Peralatan Aquarium
+                    {% endif %}
+                    <a href="?{% for key, value in request.GET.items %}{% if key != 'category' %}{{ key }}={{ value }}&{% endif %}{% endfor %}" class="remove-filter"><i class="fas fa-times"></i></a>
+                </span>
+                {% endif %}
+                
+                {% if request.GET.price_range %}
+                <span class="filter-tag">
+                    Harga: 
+                    {% if request.GET.price_range == '0-50000' %}Rp 0 - Rp 50.000
+                    {% elif request.GET.price_range == '50000-100000' %}Rp 50.000 - Rp 100.000
+                    {% elif request.GET.price_range == '100000-200000' %}Rp 100.000 - Rp 200.000
+                    {% elif request.GET.price_range == '200000+' %}Rp 200.000+
+                    {% endif %}
+                    <a href="?{% for key, value in request.GET.items %}{% if key != 'price_range' %}{{ key }}={{ value }}&{% endif %}{% endfor %}" class="remove-filter"><i class="fas fa-times"></i></a>
+                </span>
+                {% endif %}
+                
+                {% if request.GET.sort_by %}
+                <span class="filter-tag">
+                    Urutan: 
+                    {% if request.GET.sort_by == 'name' %}Nama A-Z
+                    {% elif request.GET.sort_by == '-name' %}Nama Z-A
+                    {% elif request.GET.sort_by == 'price' %}Harga Terendah
+                    {% elif request.GET.sort_by == '-price' %}Harga Tertinggi
+                    {% elif request.GET.sort_by == '-created_at' %}Terbaru
+                    {% endif %}
+                    <a href="?{% for key, value in request.GET.items %}{% if key != 'sort_by' %}{{ key }}={{ value }}&{% endif %}{% endfor %}" class="remove-filter"><i class="fas fa-times"></i></a>
+                </span>
+                {% endif %}
+                
+                <a href="{% url 'wishlist' %}" class="clear-all-filters">Hapus Semua Filter</a>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="filter-section" id="filterSection">
+            <form method="GET" action="{% url 'wishlist' %}" class="filter-form">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="category">Kategori:</label>
+                        <select name="category" id="category">
+                            <option value="">Semua Kategori</option>
+                            <option value="Fish" {% if request.GET.category == 'Fish' %}selected{% endif %}>Ikan</option>
+                            <option value="FishFood" {% if request.GET.category == 'FishFood' %}selected{% endif %}>Makanan Ikan</option>
+                            <option value="FishMedicine" {% if request.GET.category == 'FishMedicine' %}selected{% endif %}>Obat Ikan</option>
+                            <option value="AquariumStuff" {% if request.GET.category == 'AquariumStuff' %}selected{% endif %}>Peralatan Aquarium</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="price_range">Rentang Harga:</label>
+                        <select name="price_range" id="price_range">
+                            <option value="">Semua Harga</option>
+                            <option value="0-50000" {% if request.GET.price_range == '0-50000' %}selected{% endif %}>Rp 0 - Rp 50.000</option>
+                            <option value="50000-100000" {% if request.GET.price_range == '50000-100000' %}selected{% endif %}>Rp 50.000 - Rp 100.000</option>
+                            <option value="100000-200000" {% if request.GET.price_range == '100000-200000' %}selected{% endif %}>Rp 100.000 - Rp 200.000</option>
+                            <option value="200000+" {% if request.GET.price_range == '200000+' %}selected{% endif %}>Rp 200.000+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sort_by">Urutkan:</label>
+                        <select name="sort_by" id="sort_by">
+                            <option value="name" {% if request.GET.sort_by == 'name' %}selected{% endif %}>Nama A-Z</option>
+                            <option value="-name" {% if request.GET.sort_by == '-name' %}selected{% endif %}>Nama Z-A</option>
+                            <option value="price" {% if request.GET.sort_by == 'price' %}selected{% endif %}>Harga Terendah</option>
+                            <option value="-price" {% if request.GET.sort_by == '-price' %}selected{% endif %}>Harga Tertinggi</option>
+                            <option value="-created_at" {% if request.GET.sort_by == '-created_at' %}selected{% endif %}>Terbaru Ditambahkan</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button type="submit" class="filter-submit">
+                        <i class="fas fa-check"></i> Terapkan Filter
+                    </button>
+                    <a href="{% url 'wishlist' %}" class="filter-reset">
+                        <i class="fas fa-undo"></i> Reset
+                    </a>
+                </div>
+            </form>
+        </div>
+        
+        {% if wishlist_items %}
+            <div class="wishlist-grid">
+                {% for item in wishlist_items %}
+                <div class="wishlist-card" data-wishlist-id="{{ item.id }}">
+                    <div class="wishlist-image">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+                        {% else %}
+                            <img src="{% static 'img/default-product.png' %}" alt="No Image" />
+                        {% endif %}
+                    </div>
+                    
+                    <div class="wishlist-info">
+                        <h3>{{ item.product.name }}</h3>
+                        <p class="wishlist-vendor">{{ item.product.vendor }}</p>
+                        <p class="wishlist-price">Rp{{ item.product.price }}</p>
+                        <p class="wishlist-stock">Stok: {{ item.product.stock }}</p>
+                    </div>
+                    
+                    <div class="wishlist-actions">
+                        <button class="remove-btn remove-from-wishlist-btn" 
+                                data-wishlist-id="{{ item.id }}"
+                                data-product-id="{{ item.object_id }}">
+                            <i class="fas fa-heart-broken"></i> Hapus dari Wishlist
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-wishlist">
+                <i class="fas fa-heart-broken empty-icon"></i>
+                <h3>Wishlist Anda Kosong</h3>
+                <p>Belum ada produk yang ditambahkan ke wishlist.</p>
+                <a href="{% url 'user_product_list_ikan' %}" class="shop-btn">
+                    <i class="fas fa-shopping-basket"></i> Explore Produk
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Script untuk wishlist -->
+    <script src="{% static 'js/wishlist.js' %}"></script>
+    
+    <!-- Script khusus untuk halaman wishlist -->
+    <script>
+        // Toggle filter function
+        function toggleFilter() {
+            const filterSection = document.getElementById('filterSection');
+            filterSection.classList.toggle('active');
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listener untuk tombol hapus di halaman wishlist
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.remove-from-wishlist-btn')) {
+                    e.preventDefault();
+                    
+                    const button = e.target.closest('.remove-from-wishlist-btn');
+                    const wishlistId = button.dataset.wishlistId;
+                    const card = button.closest('.wishlist-card');
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                    
+                    button.disabled = true;
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghapus...';
+                    
+                    fetch(`/remove_from_wishlist/${wishlistId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Hapus card dengan animasi
+                            card.style.transition = 'all 0.5s';
+                            card.style.opacity = '0';
+                            card.style.transform = 'scale(0.8)';
+                            
+                            setTimeout(() => {
+                                card.remove();
+                                
+                                // Update counter
+                                const wishlistCount = document.querySelector('.wishlist-count');
+                                const remainingCards = document.querySelectorAll('.wishlist-card');
+                                if (remainingCards.length === 0) {
+                                    location.reload();
+                                } else if (wishlistCount) {
+                                    wishlistCount.textContent = `(${remainingCards.length})`;
+                                }
+                            }, 500);
+                            
+                            // Tampilkan pesan sukses
+                            showMessage('success', data.message);
+                        } else {
+                            showMessage('error', data.message);
+                            button.disabled = false;
+                            button.innerHTML = '<i class="fas fa-heart-broken"></i> Hapus dari Wishlist';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showMessage('error', 'Terjadi kesalahan saat menghapus dari wishlist');
+                        button.disabled = false;
+                        button.innerHTML = '<i class="fas fa-heart-broken"></i> Hapus dari Wishlist';
+                    });
+                }
+            });
+            
+            // Function to show messages
+            function showMessage(type, message) {
+                let messagesContainer = document.querySelector('.messages');
+                
+                if (!messagesContainer) {
+                    messagesContainer = document.createElement('div');
+                    messagesContainer.className = 'messages';
+                    document.querySelector('header').after(messagesContainer);
+                }
+                
+                const messageElement = document.createElement('div');
+                messageElement.className = type;
+                messageElement.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
+                
+                messagesContainer.appendChild(messageElement);
+                
+                // Add animation
+                setTimeout(() => {
+                    messageElement.classList.add('show');
+                }, 10);
+                
+                setTimeout(() => {
+                    messageElement.classList.remove('show');
+                    messageElement.classList.add('hide');
+                    
+                    setTimeout(() => {
+                        messageElement.remove();
+                        if (messagesContainer.children.length === 0) {
+                            messagesContainer.remove();
+                        }
+                    }, 300);
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+<footer class="footer-gradient">
+    <p>© 2025 – 2029 Waluya Aquarium. All Rights Reserved.</p>
+</footer>
+</html>

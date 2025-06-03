@@ -1,0 +1,18 @@
+<h2>Send Us A Message</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <div>{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+{% if user.is_authenticated %}
+  <form method="POST" action="{% url 'contact_admin' %}">
+    {% csrf_token %}
+    {{ form.email }}
+    {{ form.content }}
+    <button type="submit">Send</button>
+  </form>
+{% else %}
+  <p><a href="{% url 'user_login' %}">Login</a> dulu untuk mengirim pesan.</p>
+{% endif %}
