@@ -7,46 +7,46 @@ Waluya Akuarium adalah website promosi yang didedikasikan untuk memperkenalkan t
 
 ## Tim Kami
 
-- **Aisyah (G6401221017)** - Backend Developer, Website Integrator
-- **Budi (G6401221006)** - UI/UX Designer, Frontend Developer
-- **Citra (G6401221094)** - UI/UX Designer, Frontend Developer
+- **Qurrotul 'Aini (G6401221070)** - Backend Developer
+- **Aulia Rahmasiyfa (G6401231033)** - Backend Developer
+- **Aliya Shahira (G6401231116)** - Frontend Developer
+- **Felicia (G6401231060)** - Frontend Developer
+- **Muhammad Abyan (G6401231078)** - UI/UX Designer
 
 ## Diagram
 
-### Diagram Entitas Relasi (ERD)
+### Diagram Use Case (Use Case Diagram)
 
-![ERD](./public/img/diagram/ERD_fix.jpg)
+![ERD](./public/UCD.png)
 
 ### Diagram Kelas (Class Diagram)
 
-![ClassD](./public/img/diagram/classDiagram_fix.jpg)
+![ClassD](./public/CD.png)
 
 ### Diagram Aktivitas (Activity Diagram)
 
-![ActivityD](./public/img/diagram/activityDiagram_fix.jpg)
+![ActivityD](./public/AD1.png)
+![ActivityD](./public/AD2.png)
+![ActivityD](./public/AD3.png)
 
-### Diagram Use Case (Use Case Diagram)
+### Diagram Entitas Relasi (ERD)
 
-![UseCaseD](./public/img/diagram/useCase_fix.jpg)
+![UseCaseD](./public/ERD.png)
 
 ## Fitur
 
-### Halaman Sambutan (Welcome Page)
+### Website
 
-Halaman sambutan memberikan pengenalan singkat tentang toko dan layanan yang disediakan. Halaman ini bertujuan untuk menarik perhatian pengunjung dan memberi mereka gambaran umum mengenai toko ikan Waluya Akuarium.
+[![Watch the video](https://img.youtube.com/vi/htLvmupx3CU/0.jpg)](https://www.youtube.com/watch?v=htLvmupx3CU)
 
-![WelcomeP](./public/img/ss/Welcome.jpg)
+### Kode
 
-### Halaman Utama (Home Page)
+[![Watch the video](https://img.youtube.com/vi/EWCD64oZ0lw/0.jpg)](https://www.youtube.com/watch?v=EWCD64oZ0lw)
 
-Halaman utama menampilkan produk unggulan, kategori ikan, serta informasi terkait layanan dan fasilitas toko. Desain halaman ini fokus pada pengalaman pengguna yang mudah untuk menavigasi produk yang ditawarkan dan mendapatkan informasi yang relevan dengan cepat.
-
-![HomeP](./public/img/ss/Home.jpg)
 
 ## Teknologi yang Digunakan
 
-- **Frontend**: HTML, CSS, JavaScript (React.js)
-- **Backend**: Node.js, Express.js
-- **Database**: MySQL
+- **Frontend**: HTML, CSS, JavaScript 
+- **Backend**: Django
+- **Database**: DQLite
 - **Version Control**: Git
-
