@@ -64,6 +64,7 @@
         </div>
         
         <!-- Filter Section -->
+         <!--
         <div class="filter-container">
             <button class="filter-button" onclick="toggleFilter()">
                 <i class="fas fa-filter"></i>
@@ -87,10 +88,10 @@
                 {% if request.GET.price_range %}
                 <span class="filter-tag">
                     Harga: 
-                    {% if request.GET.price_range == '0-50000' %}Rp 0 - Rp 50.000
-                    {% elif request.GET.price_range == '50000-100000' %}Rp 50.000 - Rp 100.000
-                    {% elif request.GET.price_range == '100000-200000' %}Rp 100.000 - Rp 200.000
-                    {% elif request.GET.price_range == '200000+' %}Rp 200.000+
+                    {% if request.GET.price_range == '0.00-50000.00' %}Rp 0 - Rp 50.000
+                    {% elif request.GET.price_range == '50000.00-100000.00' %}Rp 50.000 - Rp 100.000
+                    {% elif request.GET.price_range == '100000.00-200000.00' %}Rp 100.000 - Rp 200.000
+                    {% elif request.GET.price_range == '200000.00+' %}Rp 200.000+
                     {% endif %}
                     <a href="?{% for key, value in request.GET.items %}{% if key != 'price_range' %}{{ key }}={{ value }}&{% endif %}{% endfor %}" class="remove-filter"><i class="fas fa-times"></i></a>
                 </span>
@@ -112,7 +113,7 @@
                 <a href="{% url 'wishlist' %}" class="clear-all-filters">Hapus Semua Filter</a>
             </div>
             {% endif %}
-        </div>
+        </div> -->
         
         <div class="filter-section" id="filterSection">
             <form method="GET" action="{% url 'wishlist' %}" class="filter-form">
@@ -132,11 +133,11 @@
                         <label for="price_range">Rentang Harga:</label>
                         <select name="price_range" id="price_range">
                             <option value="">Semua Harga</option>
-                            <option value="0-50000" {% if request.GET.price_range == '0-50000' %}selected{% endif %}>Rp 0 - Rp 50.000</option>
-                            <option value="50000-100000" {% if request.GET.price_range == '50000-100000' %}selected{% endif %}>Rp 50.000 - Rp 100.000</option>
-                            <option value="100000-200000" {% if request.GET.price_range == '100000-200000' %}selected{% endif %}>Rp 100.000 - Rp 200.000</option>
-                            <option value="200000+" {% if request.GET.price_range == '200000+' %}selected{% endif %}>Rp 200.000+</option>
-                        </select>
+                        <option value="0.00-50000.00" {% if request.GET.price_range == '0.00-50000.00' %}selected{% endif %}>Rp 0 - Rp 50.000</option>
+                        <option value="50000.00-100000.00" {% if request.GET.price_range == '50000.00-100000.00' %}selected{% endif %}>Rp 50.000 - Rp 100.000</option>
+                        <option value="100000.00-200000.00" {% if request.GET.price_range == '100000.00-200000.00' %}selected{% endif %}>Rp 100.000 - Rp 200.000</option>
+                        <option value="200000.00+" {% if request.GET.price_range == '200000.00+' %}selected{% endif %}>Rp 200.000+</option>
+                    </select>
                     </div>
                     
                     <div class="filter-group">

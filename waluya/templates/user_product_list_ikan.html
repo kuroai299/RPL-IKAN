@@ -62,7 +62,7 @@
     <h1 class="section-title">IKAN</h1>
     <div class="search-bar">
         <img src="{% static 'img/bx-search-alt-2.svg' %}" alt="Search Icon" class="search-icon" />
-        <form method="get" action="{% url 'user_product_list_makanan_ikan' %}">
+        <form method="get" action="{% url 'user_product_list_ikan' %}">
             <input type="text" name="search" placeholder="Search here" value="{{ request.GET.search }}" />
             <button type="submit" style="display: none;"></button>
         </form>
@@ -77,22 +77,22 @@
                 </button>
             </div>
             <div id="filterSection" class="filter-section">
-                <form method="get" action="{% url 'user_product_list_makanan_ikan' %}">
+                <form method="get" action="{% url 'user_product_list_ikan' %}">
                     <div class="filter-group">
                         <label for="orderBy">Urutkan sesuai:</label>
                         <select name="order_by" id="orderBy">
                             <option value="price_asc" {% if request.GET.order_by == 'price_asc' %}selected{% endif %}>Harga: Murah ke Mahal</option>
                             <option value="price_desc" {% if request.GET.order_by == 'price_desc' %}selected{% endif %}>Harga: Mahal ke Murah</option>
-                            <option value="name_asc" {% if request.GET.order_by == 'name_asc' %}selected{% endif %}>Nama: A-Z</option>
-                            <option value="name_desc" {% if request.GET.order_by == 'name_desc' %}selected{% endif %}>Nama: Z-A</option>
+                            
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label for="foodTypeFilter">Filter Jenis Makanan:</label>
-                        <select name="food_type" id="foodTypeFilter">
-                            <option value="">-- Semua Jenis --</option>
-                            <option value="organik" {% if request.GET.food_type == 'organik' %}selected{% endif %}>Organik</option>
-                            <option value="olahan" {% if request.GET.food_type == 'olahan' %}selected{% endif %}>Olahan</option>
+                        <label for="fishTypeFilter">Filter Jenis Ikan:</label>
+                        <select name="fish_type" id="fishTypeFilter">
+                            <option value="">Semua Jenis</option>
+                            <option value="Kecil">Kecil</option>
+                            <option value="">Sedang</option>
+                            <option value="">Besar</option>
                         </select>
                     </div>
                     <button type="submit" class="filter-submit">Terapkan Filter</button>

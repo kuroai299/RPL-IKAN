@@ -130,13 +130,14 @@
                     
                     <div class="filter-group">
                         <label for="price_range">Rentang Harga:</label>
-                        <select name="price_range" id="price_range">
-                            <option value="">Semua Harga</option>
-                            <option value="0-50000" {% if request.GET.price_range == '0-50000' %}selected{% endif %}>Rp 0 - Rp 50.000</option>
-                            <option value="50000-100000" {% if request.GET.price_range == '50000-100000' %}selected{% endif %}>Rp 50.000 - Rp 100.000</option>
-                            <option value="100000-200000" {% if request.GET.price_range == '100000-200000' %}selected{% endif %}>Rp 100.000 - Rp 200.000</option>
-                            <option value="200000+" {% if request.GET.price_range == '200000+' %}selected{% endif %}>Rp 200.000+</option>
-                        </select>
+                            <select name="price_range" id="price_range">
+                                <option value="">Semua Harga</option>
+                                <option value="0.00-50000.00" {% if request.GET.price_range == '0.00-50000.00' %}selected{% endif %}>Rp 0 - Rp 50.000</option>
+                                <option value="50000.00-100000.00" {% if request.GET.price_range == '50000.00-100000.00' %}selected{% endif %}>Rp 50.000 - Rp 100.000</option>
+                                <option value="100000.00-200000.00" {% if request.GET.price_range == '100000.00-200000.00' %}selected{% endif %}>Rp 100.000 - Rp 200.000</option>
+                                <option value="200000.00+" {% if request.GET.price_range == '200000.00+' %}selected{% endif %}>Rp 200.000+</option>
+                            </select>
+
                     </div>
                     
                     <div class="filter-group">
